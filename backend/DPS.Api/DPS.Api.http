@@ -1,0 +1,6 @@
+@DPS.Api_HostAddress = http://localhost:5263
+
+GET {{DPS.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

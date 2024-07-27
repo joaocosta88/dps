@@ -1,0 +1,15 @@
+C:\code\DPS\DPS.Application\bin\Debug\net8.0\DPS.Application.deps.json
+C:\code\DPS\DPS.Application\bin\Debug\net8.0\DPS.Application.dll
+C:\code\DPS\DPS.Application\bin\Debug\net8.0\DPS.Application.pdb
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.AssemblyInfoInputs.cache
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.AssemblyInfo.cs
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.csproj.CoreCompileInputs.cache
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.dll
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\refint\DPS.Application.dll
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.pdb
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\ref\DPS.Application.dll
+C:\code\DPS\DPS.Application\bin\Debug\net8.0\DPS.Common.dll
+C:\code\DPS\DPS.Application\bin\Debug\net8.0\DPS.Common.pdb
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.csproj.AssemblyReference.cache
+C:\code\DPS\DPS.Application\obj\Debug\net8.0\DPS.Application.csproj.CopyComplete

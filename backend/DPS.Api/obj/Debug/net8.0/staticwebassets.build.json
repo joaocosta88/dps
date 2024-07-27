@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "W3K5NgeDDgvSCa6hxFgzM2PjtWt1Ll3vMNRULssFZ5E=",
+  "Source": "DPS.Api",
+  "BasePath": "_content/DPS.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
