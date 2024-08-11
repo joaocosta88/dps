@@ -1,5 +1,6 @@
 using DPS.Data;
 using DPS.Data.Entities;
+using DPS.Service.Listings;
 using DPS.Service.User;
 using DPS.Service.User.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,7 +53,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
-builder.Services.AddTransient<UserService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ListingService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DPS.Common\DPS.Common.csproj" />
     <ProjectReference Include="..\DPS.Data\DPS.Data.csproj" />
   </ItemGroup>
 

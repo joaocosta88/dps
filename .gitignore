@@ -24,6 +24,7 @@ nupkg/
 
 # User-specific files
 **/*.suo
+backend/.vs/DPS/v17/.suo
 *.user
 *.userosscache
 *.sln.docstates

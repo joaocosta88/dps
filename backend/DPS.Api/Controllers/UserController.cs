@@ -32,9 +32,6 @@ namespace Api.Controllers {
 		[Authorize]
 		public IActionResult Profile()
 		{
-			Console.WriteLine(User.Claims.ToString());
-
-
 			return Ok(new AppResponse<object>()
 			{
 				Data = new
