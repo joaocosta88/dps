@@ -1,11 +1,14 @@
+using DPS.Api;
 using DPS.Data;
 using DPS.Data.Entities;
+using DPS.Data.Interceptors;
 using DPS.Service.Listings;
 using DPS.Service.User;
 using DPS.Service.User.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -14,8 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
+{
+	options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+	options.UseNpgsql(connectionString);
+});
 
 var appSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>() ?? default!;
 builder.Services.AddSingleton(appSettings);
@@ -55,6 +61,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ListingService>();
+builder.Services.AddScoped<IUser, CurrentUser>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ISaveChangesInterceptor, BaseEntityInterceptor>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
