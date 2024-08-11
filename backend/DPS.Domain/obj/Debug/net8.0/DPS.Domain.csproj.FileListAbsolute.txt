@@ -10,3 +10,16 @@ C:\code\DPS\DPS.Domain\obj\Debug\net8.0\DPS.Domain.dll
 C:\code\DPS\DPS.Domain\obj\Debug\net8.0\refint\DPS.Domain.dll
 C:\code\DPS\DPS.Domain\obj\Debug\net8.0\DPS.Domain.pdb
 C:\code\DPS\DPS.Domain\obj\Debug\net8.0\ref\DPS.Domain.dll
+C:\code\DPS\backend\DPS.Domain\bin\Debug\net8.0\DPS.Domain.deps.json
+C:\code\DPS\backend\DPS.Domain\bin\Debug\net8.0\DPS.Domain.dll
+C:\code\DPS\backend\DPS.Domain\bin\Debug\net8.0\DPS.Domain.pdb
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.csproj.AssemblyReference.cache
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.AssemblyInfoInputs.cache
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.AssemblyInfo.cs
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.csproj.CoreCompileInputs.cache
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.sourcelink.json
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.dll
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\refint\DPS.Domain.dll
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\DPS.Domain.pdb
+C:\code\DPS\backend\DPS.Domain\obj\Debug\net8.0\ref\DPS.Domain.dll

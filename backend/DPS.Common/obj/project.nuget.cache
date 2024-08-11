@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Albs0ahGK+5vi+86xLSnR4j9s7ZGDqglhTmovg35hMP18+SXi2zofh3a409QveISMG4ppd5RZ8QUo8ieraGZQA==",
+  "dgSpecHash": "QjY3tOvsTM9V66rtXEQgVOb1DA2yTJfNonVujGBkUxyR5fV1ywmKcie9n3x7A4QmKNUCdbTkCPemppZigrv4FQ==",
   "success": true,
-  "projectFilePath": "C:\\code\\DPS\\DPS.Common\\DPS.Common.csproj",
+  "projectFilePath": "C:\\code\\DPS\\backend\\DPS.Common\\DPS.Common.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joaot\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.7\\microsoft.aspnetcore.cryptography.internal.8.0.7.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.7\\microsoft.aspnetcore.cryptography.keyderivation.8.0.7.nupkg.sha512",

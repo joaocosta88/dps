@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\code\\DPS\\DPS.Domain\\DPS.Domain.csproj": {}
+    "C:\\code\\DPS\\backend\\DPS.Domain\\DPS.Domain.csproj": {}
   },
   "projects": {
-    "C:\\code\\DPS\\DPS.Domain\\DPS.Domain.csproj": {
+    "C:\\code\\DPS\\backend\\DPS.Domain\\DPS.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\code\\DPS\\DPS.Domain\\DPS.Domain.csproj",
+        "projectUniqueName": "C:\\code\\DPS\\backend\\DPS.Domain\\DPS.Domain.csproj",
         "projectName": "DPS.Domain",
-        "projectPath": "C:\\code\\DPS\\DPS.Domain\\DPS.Domain.csproj",
+        "projectPath": "C:\\code\\DPS\\backend\\DPS.Domain\\DPS.Domain.csproj",
         "packagesPath": "C:\\Users\\joaot\\.nuget\\packages\\",
-        "outputPath": "C:\\code\\DPS\\DPS.Domain\\obj\\",
+        "outputPath": "C:\\code\\DPS\\backend\\DPS.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\joaot\\AppData\\Roaming\\NuGet\\NuGet.Config",

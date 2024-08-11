@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yzc79Cz4tMzjVwxvDcihgMLS8XDmmqD7RjLmtEueKAW6OJggPkDkdXpUyU6YaZvN/bO8m95jmn3Q1/FzMfPdPg==",
+  "dgSpecHash": "wjxSWzyHorfJEMy3BxJUdGhgKFtCAP1drq+C34tSnnr2qmmKeEEhR+wTbjqd8tusoY4Y+YFQqSQokp7s/iTt/Q==",
   "success": true,
-  "projectFilePath": "C:\\code\\DPS\\DPS.Domain\\DPS.Domain.csproj",
+  "projectFilePath": "C:\\code\\DPS\\backend\\DPS.Domain\\DPS.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\joaot\\.nuget\\packages\\mediatr\\12.3.0\\mediatr.12.3.0.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

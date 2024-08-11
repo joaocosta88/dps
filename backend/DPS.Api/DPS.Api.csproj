@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
@@ -26,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DPS.Application\DPS.Application.csproj" />
-    <ProjectReference Include="..\DPS.Infrastructure\DPS.Infrastructure.csproj" />
+    <ProjectReference Include="..\DPS.Data\DPS.Data.csproj" />
+    <ProjectReference Include="..\DPS.Service\DPS.Service.csproj" />
   </ItemGroup>
 
 </Project>

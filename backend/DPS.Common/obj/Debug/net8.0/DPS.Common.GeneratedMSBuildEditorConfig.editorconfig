@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = DPS.Common
-build_property.ProjectDir = C:\code\DPS\DPS.Common\
+build_property.ProjectDir = C:\code\DPS\backend\DPS.Common\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

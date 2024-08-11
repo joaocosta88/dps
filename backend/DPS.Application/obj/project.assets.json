@@ -1594,11 +1594,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\code\\DPS\\DPS.Application\\DPS.Application.csproj",
+      "projectUniqueName": "C:\\code\\DPS\\backend\\DPS.Application\\DPS.Application.csproj",
       "projectName": "DPS.Application",
-      "projectPath": "C:\\code\\DPS\\DPS.Application\\DPS.Application.csproj",
+      "projectPath": "C:\\code\\DPS\\backend\\DPS.Application\\DPS.Application.csproj",
       "packagesPath": "C:\\Users\\joaot\\.nuget\\packages\\",
-      "outputPath": "C:\\code\\DPS\\DPS.Application\\obj\\",
+      "outputPath": "C:\\code\\DPS\\backend\\DPS.Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\joaot\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1615,8 +1615,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\code\\DPS\\DPS.Common\\DPS.Common.csproj": {
-              "projectPath": "C:\\code\\DPS\\DPS.Common\\DPS.Common.csproj"
+            "C:\\code\\DPS\\backend\\DPS.Common\\DPS.Common.csproj": {
+              "projectPath": "C:\\code\\DPS\\backend\\DPS.Common\\DPS.Common.csproj"
             }
           }
         }

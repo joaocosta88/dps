@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import { Routes, BrowserRouter, Route } from 'react-router-dom';
 import './App.css';
+
+import LoginForm from './Pages/Login'
+import RegisterForm from './Pages/Register';
+
+import { AuthProvider } from './Providers/AuthContext';
+import { Notifications } from '@mantine/notifications';
+import { MantineProvider } from '@mantine/core';
+
+import PrivateRoute from './Components/Routes/PrivateRoute';
+import Dashboard from './Pages/Dashboard';
+import Header from './Components/Header/Header';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+      <Notifications autoClose={40000}/>
+          <AuthProvider>
+            <Header />
+            <Routes>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
+
+              <Route element={<PrivateRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </MantineProvider>
+      </BrowserRouter>
+      
     </div>
   );
 }

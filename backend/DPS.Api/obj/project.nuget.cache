@@ -1,15 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "yHSCo2S832kGKcEJ0u46DcjpH9+a35oI2+eGMah177NhaIWIIYv6d1Iq1eqJ+NPmV4Cm8sHBvTvb8LuWEjsLcw==",
+  "dgSpecHash": "x1d4iVCXzBVXCn5ViOs1H9weVn89vBI2Wo7qzBnXwCF/PrfhgoJqffMzbJN5E0pFBpesCMZaIkrEsP8xbFle2w==",
   "success": true,
-  "projectFilePath": "C:\\code\\DPS\\DPS.Api\\DPS.Api.csproj",
+  "projectFilePath": "C:\\code\\DPS\\backend\\DPS.Api\\DPS.Api.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\joaot\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
-    "C:\\Users\\joaot\\.nuget\\packages\\mediatr\\12.3.0\\mediatr.12.3.0.nupkg.sha512",
-    "C:\\Users\\joaot\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.7\\microsoft.aspnetcore.authentication.jwtbearer.8.0.7.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.7\\microsoft.aspnetcore.cryptography.internal.8.0.7.nupkg.sha512",
     "C:\\Users\\joaot\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.7\\microsoft.aspnetcore.cryptography.keyderivation.8.0.7.nupkg.sha512",

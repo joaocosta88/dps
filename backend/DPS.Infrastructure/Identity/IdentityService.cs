@@ -6,6 +6,8 @@ namespace DPS.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService {
 	private readonly UserManager<ApplicationUser> _userManager;
+	SignInManager<ApplicationUser> signInManager;
+
 	private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
 	private readonly IAuthorizationService _authorizationService;
 
@@ -40,6 +42,7 @@ public class IdentityService : IIdentityService {
 
 		return user;
 	}
+
 
 	public async Task<IdentityUser?> LoginAsync(string email, string password)
 	{

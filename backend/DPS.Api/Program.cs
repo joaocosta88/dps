@@ -1,8 +1,13 @@
-using DPS.Application.Common.Interfaces;
-using DPS.Infrastructure.Data;
-using DPS.Infrastructure.Identity;
+using DPS.Data;
+using DPS.Data.Entities;
+using DPS.Service.User;
+using DPS.Service.User.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,39 +16,98 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseNpgsql(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+var appSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>() ?? default!;
+builder.Services.AddSingleton(appSettings);
 
-builder.Services.AddDefaultIdentity<ApplicationUser>()
-			.AddRoles<IdentityRole>()
-			.AddEntityFrameworkStores<ApplicationDbContext>()
-			.AddApiEndpoints();
+builder.Services.AddIdentityCore<ApplicationUser>()
+			   .AddRoles<IdentityRole>()
+			   .AddSignInManager()
+			   .AddEntityFrameworkStores<ApplicationDbContext>()
+			   .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("REFRESHTOKENPROVIDER");
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+	options.TokenLifespan = TimeSpan.FromSeconds(appSettings.RefreshTokenExpireSeconds);
+});
+
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+	options.RequireHttpsMetadata = false;
+	options.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = true,
+		ValidateAudience = true,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		RequireExpirationTime = true,
+		ValidIssuer = appSettings.Issuer,
+		ValidAudience = appSettings.Audience,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey)),
+		ClockSkew = TimeSpan.FromSeconds(0)
+	};
+});
+
+builder.Services.AddScoped<ApplicationDbContextInitialiser>();
+builder.Services.AddTransient<UserService>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication().
-	AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("webAppRequests", builder =>
+	{
+		builder.AllowAnyHeader()
+		.AllowAnyMethod()
+		.WithOrigins(appSettings.Audience)
+		.AllowCredentials();
+	});
+});
+
+builder.Services.AddSwaggerGen(config =>
+{
+	config.SwaggerDoc("v1", new OpenApiInfo() { Title = "App Api", Version = "v1" });
+	config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Please enter token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "bearer"
+	});
+	config.AddSecurityRequirement(
+		new OpenApiSecurityRequirement{
+						{
+							new OpenApiSecurityScheme
+							{
+								Reference = new OpenApiReference
+								{
+									Type=ReferenceType.SecurityScheme,
+									Id="Bearer"
+								}
+							},
+							Array.Empty<string>()
+						}
+		});
+});
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
+	using var scope = app.Services.CreateScope();
+	var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+	await initialiser.InitialiseAsync();
+	await initialiser.SeedAsync();
 }
-
-using (var serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-{
-	var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-	context!.Database.Migrate();
-}
-
+app.UseHttpsRedirection();
+app.UseCors("webAppRequests");
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapGroup("account").MapIdentityApi<ApplicationUser>();
-
+app.MapControllers();
 app.Run();

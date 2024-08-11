@@ -1481,11 +1481,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\code\\DPS\\DPS.Common\\DPS.Common.csproj",
+      "projectUniqueName": "C:\\code\\DPS\\backend\\DPS.Common\\DPS.Common.csproj",
       "projectName": "DPS.Common",
-      "projectPath": "C:\\code\\DPS\\DPS.Common\\DPS.Common.csproj",
+      "projectPath": "C:\\code\\DPS\\backend\\DPS.Common\\DPS.Common.csproj",
       "packagesPath": "C:\\Users\\joaot\\.nuget\\packages\\",
-      "outputPath": "C:\\code\\DPS\\DPS.Common\\obj\\",
+      "outputPath": "C:\\code\\DPS\\backend\\DPS.Common\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\joaot\\AppData\\Roaming\\NuGet\\NuGet.Config",
