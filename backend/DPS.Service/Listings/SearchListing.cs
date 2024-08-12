@@ -17,18 +17,18 @@ public class SearchListingsResponse
 
 public partial class  ListingService {
 
-	public async Task<AppResponse<List<SearchListingsResponse>>> SearchListingsAsync(string userId, string keyword)
+	public async Task<AppResponse<List<SearchListingsResponse>>> SearchListingsAsync(string? userId, string? keyword, bool includeDeleteds = false)
 	{
 		var query = _context.Listings.AsQueryable();
 		if (userId != null)
-		{
 			query = query.Where(m => m.Owner.Id == userId);
-		}
+		
 		if (!string.IsNullOrWhiteSpace(keyword))
-		{
 			query = query.Where(m => m.Name.Contains(keyword) ||
 			m.Description.Contains(keyword));
-		}
+
+		if (!includeDeleteds)
+			query = query.Where(m => !m.IsDeleted);
 
 		var queryResult = await query.Include(m =>m.Owner).ToListAsync();
 

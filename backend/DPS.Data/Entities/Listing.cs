@@ -5,5 +5,6 @@ public class Listing : BaseEntity {
 	public required decimal Price { get; set; }
 
 	public IList<string> ImageUrls { get; set; } = [];
+	public bool IsDeleted { get; set; } = false;
 	public required ApplicationUser Owner { get; set; }
 }

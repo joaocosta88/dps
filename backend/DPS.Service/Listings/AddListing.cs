@@ -14,9 +14,6 @@ public class AddListingResponse {
 	public string Name { get; set; }
 	public string Description { get; set; }
 	public decimal Price { get; set; }
-	public string UserId { get; set; }
-	public DateTimeOffset CreatedAt { get; set; }
-	public string CreatedBy { get; set; }
 }
 
 public partial class ListingService {
@@ -46,9 +43,6 @@ public partial class ListingService {
 			Name = listing.Name,
 			Description = listing.Description,
 			Price = listing.Price,
-			UserId = listing.Owner.Id,
-			CreatedAt = listing.CreatedAt,
-			CreatedBy = listing.CreatedBy
 		};
 
 		return new AppResponse<AddListingResponse>().SetSuccessResponse(res);

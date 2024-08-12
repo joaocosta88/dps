@@ -18,6 +18,21 @@ public class ListingController(ListingService listingService) : ControllerBase {
 		return Ok(res);
 	}
 
+	[HttpPut]
+	[Authorize]
+	public IActionResult UpdateListing (UpdateListingRequest request)
+	{
+		var res = listingService.UpdateListing(request, User.FindFirstValue("Id"));
+		return Ok(res);
+	}
+
+	[HttpDelete]
+	public IActionResult DeleteListing (Guid listingId)
+	{
+		var res = listingService.DeleteListing(listingId, User.FindFirstValue("Id"));
+		return Ok(res);
+	}
+
 	[HttpGet]
 	public async Task<IActionResult> SearchListingsByUserId(string? userId = null, string? keyword = null)
 	{
