@@ -24,7 +24,7 @@ public class UploadFileToS3Response
 
 public partial class S3Service {
 
-	public async Task<IList<UploadFileToS3Response>> UploadFiles(IList<UploadFileToS3Request> req)
+	public async Task<IList<AwsResponse<UploadFileToS3Response>>> UploadFiles(IList<UploadFileToS3Request> req)
 	{
 		IList<Task<UploadFileToS3Response>> tasks = [];
 		foreach(var item in req)
@@ -38,7 +38,7 @@ public partial class S3Service {
 		return tasks.Select(m => m.Result).ToList();
 	}
 
-	public async Task<UploadFileToS3Response> UploadFile(UploadFileToS3Request req)
+	public async Task<AwsResponse<UploadFileToS3Response>> UploadFile(UploadFileToS3Request req)
 	{
 		using (IAmazonS3 client = new AmazonS3Client())
 		{
@@ -52,8 +52,15 @@ public partial class S3Service {
 				CannedACL = S3CannedACL.Private
 			};
 
-			await fileTransferUtility.UploadAsync(transferUtilityUploadRequest);
-
+			bool success = true;
+			try
+			{
+				await fileTransferUtility.UploadAsync(transferUtilityUploadRequest);
+			}
+			catch(Exception e)
+			{
+				success = false;
+			}
 			return new UploadFileToS3Response
 			{
 				BucketName = _bucketName,
