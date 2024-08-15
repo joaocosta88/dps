@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 namespace DPS.Aws.S3;
 
 public class GetS3FileRequest {
-	public string BucketName { get; set }
 	public string Filename { get; set; }
 }
 
@@ -20,7 +19,7 @@ public partial class S3Service {
 	{
 		var getObjectRequest = new GetObjectRequest
 		{
-			BucketName = request.BucketName,
+			BucketName = _bucketName,
 			Key = request.Filename,
 		};
 
