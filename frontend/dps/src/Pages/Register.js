@@ -1,7 +1,7 @@
 import { useForm } from '@mantine/form';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
-import { useContext, useState } from "react";
-import AuthContext from '../Providers/AuthContext';
+import { useContext } from "react";
+import { AuthContext } from '../Providers/AuthProvider';
 
 const Register = () => {
 

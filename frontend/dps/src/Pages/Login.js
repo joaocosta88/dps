@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import AuthContext from '../Providers/AuthContext';
+import { AuthContext } from '../Providers/AuthProvider';
 import { notifications } from '@mantine/notifications';
 
 const Login = () => {
@@ -19,11 +19,11 @@ const Login = () => {
   const handleSubmitEvent = (e) => {
     e.preventDefault();
     if (input.email !== "" && input.password !== "") {
-      auth.login(input);
+      console.log("input is "+JSON.stringify(input))
+      auth.login(input.email, input.password);
       return;
     }
   };
-  
 
   const handleInput = (e) => {
     notifications.show({

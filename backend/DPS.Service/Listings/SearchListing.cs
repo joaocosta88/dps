@@ -13,6 +13,7 @@ public class SearchListingsResponse
 	public required string Name { get; set; }
 	public required string Description { get; set; }
 	public required string UserId { get; set; }
+	public required IList<string> ImageUrls { get; set; }
 }
 
 public partial class  ListingService {
@@ -37,7 +38,8 @@ public partial class  ListingService {
 			Id = m.Id,
 			Name = m.Name,
 			Description = m.Description,
-			UserId = m.Owner.Id
+			UserId = m.Owner.Id,
+			ImageUrls = m.ImageUrls
 		}).ToList();
 
 		return new AppResponse<List<SearchListingsResponse>>().SetSuccessResponse(res);
