@@ -1,8 +1,8 @@
 import config from "../Config"
-import { makeGetRequest, makeAnonymousPostRequest, makePostRequest } from "./HttpRequestManager";
+import { makeGetRequest, makeAnonymousPostRequestAsync, makePostRequest } from "./HttpRequestManager";
 
-export async function performLogin(email, password) {
-    return await makeAnonymousPostRequest(config.API_URL + "/user/login",
+export async function loginUserAsync(email, password) {
+    return await makeAnonymousPostRequestAsync("/user/login",
         {
             "email": email,
             "password": password
@@ -11,14 +11,14 @@ export async function performLogin(email, password) {
 
 export async function refreshAccessToken(accessToken, refreshToken) {
     console.log("refreshing token");
-    return await makeAnonymousPostRequest(config.API_URL+"/user/refreshtoken", {
+    return await makeAnonymousPostRequestAsync(config.API_URL+"/user/refreshtoken", {
         "accessToken": accessToken,
         "refreshToken": refreshToken
     });
 }
 
-export async function registerUser(email, password) {
-    return await makeAnonymousPostRequest(config.API_URL + "/user/register",
+export async function registerUserAsync(email, password) {
+    return await makeAnonymousPostRequestAsync("/user/register",
         {
             "email": email,
             "password": password

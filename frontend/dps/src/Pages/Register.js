@@ -1,11 +1,10 @@
 import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
-import { useContext } from "react";
-import { AuthContext } from '../Providers/AuthProvider';
+
+import { registerUserAsync } from '../Services/BackendHttpService';
 
 const Register = () => {
-
-    const auth = useContext(AuthContext)
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -25,8 +24,25 @@ const Register = () => {
     });
 
 
-    const handleSubmit = (values) => {
-        auth.register(values);
+    const handleSubmit = async (values) => {
+        var response = await registerUserAsync(values.email, values.password)
+        if (!response.data.success)
+        {
+            if (response.data.error.errorCode === "duplicate_email") {
+                notifications.show({
+                    color: "red",
+                    title: 'Error while registering user',
+                    message: 'This email is already registered',
+                })
+            }
+            else {
+                notifications.show({
+                    color: "red",
+                    title: 'Error while registering user',
+                    message: 'Registration failed' ,
+                })
+            }
+        }
     };
 
     return (

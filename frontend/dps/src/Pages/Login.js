@@ -1,93 +1,75 @@
-import { useContext, useState } from "react";
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { AuthContext } from '../Providers/AuthProvider';
+import { useContext } from 'react';
+
+import AuthContext from '../Providers/AuthProvider';
+
+import { loginUserAsync } from '../Services/BackendHttpService';
+
+import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+ 
+
 
 const Login = () => {
+    const { setAuth } = useContext(AuthContext);
 
-  const auth = useContext(AuthContext)
+    const form = useForm({
+        mode: 'uncontrolled',
+        validateInputOnChange: true,
+        initialValues: {
+            email: '',
+            password: '',
+        },
 
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-  });
+        // functions will be used to validate values at corresponding key
+        validate: {
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email')
+        },
+    });
 
-  const handleSubmitEvent = (e) => {
-    e.preventDefault();
-    if (input.email !== "" && input.password !== "") {
-      console.log("input is "+JSON.stringify(input))
-      auth.login(input.email, input.password);
-      return;
-    }
-  };
+    const handleSubmit = async (values) => {
+        try {
+            var response = await loginUserAsync(values.email, values.password)
+            if (response.data.success)
+                setAuth({email: values.email, 
+            accessToken: response.data.data.accessToken, refreshToken: response.data.data.refreshToken})
+            if (!response.data.success) {
+                notifications.show({
+                    color: "red",
+                    title: 'Error while registering user',
+                    message: 'Login failed',
+                })
+            }
+        }
+        catch (err) {
+alert(err)
+        }
+    };
 
-  const handleInput = (e) => {
-    notifications.show({
-      title: 'Default notification',
-      message: 'Do not forget to star Mantine on GitHub! 🌟',
-    })
-    const { name, value } = e.target;
-    if (name === "email")
-      validateEmail(e.target.value)
-    
-    setInput((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const validateEmail = (mail) => {
-    if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail))
-      {
-        return (true)
-      }
-        return (false)
-  };
-
-  return (
-    <Container fluid>
-      <Row className="justify-content-md-center" >
-        <Col sm={4}>
-          <Form onSubmit={handleSubmitEvent}>
-            <Form.Group as={Row} className="m-3">
-              <Form.Label column htmlFor="user-email">Email:</Form.Label>
-              <Col >
-                <Form.Control
-                  type="email"
-                  id="user-email"
-                  name="email"
-                  placeholder="example@yahoo.com"
-                  aria-describedby="user-email"
-                  aria-invalid="false"
-                  onChange={handleInput}
-                           required />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="m-3">
-              <Form.Label column htmlFor="password">Password:</Form.Label>
-              <Col >
-                <Form.Control
-                  type="password"
-                  id="password"
-                  name="password"
-                  aria-describedby="user-password"
-                  aria-invalid="false"
-                  onChange={handleInput}
-                  required
+    return (
+        <Box maw={340} mx="auto">
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+                <TextInput
+                    mt="sm"
+                    label="Email"
+                    placeholder="Email"
+                    key={form.key('email')}
+                    {...form.getInputProps('email')}
                 />
-              </Col>
-            </Form.Group>
-            <Button className="btn-submit" type="Submit" >Submit</Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
-  );
+
+                <PasswordInput
+                    label="Password"
+                    placeholder="Password"
+                    key={form.key('password')}
+                    {...form.getInputProps('password')}
+                />
+
+                <Group justify="flex-end" mt="md">
+                    <Button type="submit">Submit</Button>
+                </Group>
+            </form>
+        </Box>
+    );
 };
 
 export default Login;
