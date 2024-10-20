@@ -36,7 +36,7 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
 			throw;
 		}
 	}
-	public async Task TrySeedAsync()
+	private async Task TrySeedAsync()
 	{
 		// Default roles
 		var administratorRole = new IdentityRole("Administrator");
@@ -54,14 +54,14 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
 		}
 
 		// Default users
-		var administrator = new ApplicationUser { UserName = "UnifiedAppAdmin", Email = "UnifiedAppAdmin" };
-
-		if (_userManager.Users.All(u => u.UserName != administrator.UserName))
+		var adminUser = new ApplicationUser { Email = "admin2@gmail.com", UserName = "admin2@gmail.com"};
+		if (_userManager.Users.All(u => u.Email != adminUser.Email))
 		{
-			await _userManager.CreateAsync(administrator, "UnifiedAppAdmin1!");
+			var result = await _userManager.CreateAsync(adminUser, "Aa11122233334444!");
 			if (!string.IsNullOrWhiteSpace(administratorRole.Name))
 			{
-				await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+				var roleResult = await _userManager.AddToRolesAsync(adminUser, new[] { administratorRole.Name });
+				Console.WriteLine(roleResult);
 			}
 		}
 	}

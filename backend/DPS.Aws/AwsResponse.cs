@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DPS.Aws;
 public class AwsResponse<T> {
-	public bool IsSucceed { get; set; } = true;
+	public bool Success { get; set; } = true;
 	public T? Data { get; set; }
 	public Dictionary<string, string[]> Messages { get; set; } = [];
 
@@ -35,19 +35,19 @@ public class AwsResponse<T> {
 	}
 	internal AwsResponse<T> SetErrorResponse(string key, string value)
 	{
-		IsSucceed = false;
+		Success = false;
 		Messages.Add(key, [value]);
 		return this;
 	}
 	internal AwsResponse<T> SetErrorResponse(string key, string[] value)
 	{
-		IsSucceed = false;
+		Success = false;
 		Messages.Add(key, value);
 		return this;
 	}
 	internal AwsResponse<T> SetErrorResponse(Dictionary<string, string[]> message)
 	{
-		IsSucceed = false;
+		Success = false;
 		Messages = message;
 		return this;
 	}

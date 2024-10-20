@@ -2,7 +2,7 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 
-import { registerUserAsync } from '../Services/BackendHttpService';
+import { registerUserAsync } from '../services/BackendHttpService';
 
 const Register = () => {
 

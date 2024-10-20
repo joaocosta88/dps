@@ -1,30 +1,29 @@
 ﻿using DPS.Common.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPS.Service.Listings;
 
 public class UpdateListingRequest {
-	public Guid Id { get; set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public decimal Price { get; set; }
+	public required Guid Id { get; init; }
+	public required string Name { get; init; }
+	public required string Description { get; init; }
+	public required decimal Price { get; init; }
 }
 
 public class UpdateListingResponse {
-	public Guid Id { get; set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public decimal Price { get; set; }
+	public required Guid Id { get; init; }
+	public required string Name { get; init; }
+	public required string Description { get; init; }
+	public required decimal Price { get; init; }
 }
 public partial class ListingService {
 
 	public AppResponse<UpdateListingResponse> UpdateListing(UpdateListingRequest request, string? currentUserId)
 	{
-		var listing = _context.Listings.FirstOrDefault(m => m.Id == request.Id);
+		var listing = _context.Listings
+			.Include(listing => listing.Owner)
+			.FirstOrDefault(m => m.Id == request.Id);
+		
 		if (listing == null)
 			throw new InvalidParameterException($"Could not find listing with id {request.Id}");
 		if (string.IsNullOrWhiteSpace(currentUserId))
@@ -47,6 +46,6 @@ public partial class ListingService {
 			Price = listing.Price,
 		};
 
-		return new AppResponse<UpdateListingResponse>().SetSuccessResponse(res);
+		return AppResponse<UpdateListingResponse>.GetSuccessResponse(res);
 	}
 }

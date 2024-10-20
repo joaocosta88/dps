@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './Providers/AuthProvider';
+import { AuthProvider } from './providers/AuthProvider';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 

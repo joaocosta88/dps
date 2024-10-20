@@ -4,16 +4,16 @@ using DPS.Data.Entities;
 namespace DPS.Service.Listings;
 
 public class AddListingRequest {
-	public string Name {  get; set; }
-	public string Description { get; set; }
-	public decimal Price { get; set; }
+	public required string Name {  get; init; }
+	public required string Description { get; init; }
+	public required decimal Price { get; init; }
 }
 
 public class AddListingResponse {
-	public Guid Id { get; set; }
-	public string Name { get; set; }
-	public string Description { get; set; }
-	public decimal Price { get; set; }
+	public Guid Id { get; init; }
+	public required string Name { get; init; }
+	public required string Description { get; init; }
+	public required decimal Price { get; init; }
 }
 
 public partial class ListingService {
@@ -35,7 +35,7 @@ public partial class ListingService {
 		};
 
 		await _context.Listings.AddAsync(listing);
-		_context.SaveChanges();
+		await _context.SaveChangesAsync();
 
 		var res = new AddListingResponse
 		{
@@ -45,6 +45,6 @@ public partial class ListingService {
 			Price = listing.Price,
 		};
 
-		return new AppResponse<AddListingResponse>().SetSuccessResponse(res);
+		return AppResponse<AddListingResponse>.GetSuccessResponse(res);
 	}
 }

@@ -1,29 +1,30 @@
 ﻿namespace DPS.Service.User;
 
 public class UserLoginRequest {
-	public string Email { get; set; } = "";
-	public string Password { get; set; } = "";
+	public required string Email { get; init; }
+	public required string Password { get; init; }
 }
 public class UserLoginResponse {
-	public string AccessToken { get; set; } = "";
-	public string RefreshToken { get; set; } = "";
-
-	public int ExpiresIn { get; set; }
+	public required string AccessToken { get; init; }
+	public required string RefreshToken { get; init; }
+	public required int ExpiresIn { get; init; }
+	public required IList<string> Roles { get; init; }
+	public required IList<string> RoleClaims { get; init; }
 }
 
 public partial class UserService {
 	public async Task<AppResponse<UserLoginResponse>> UserLoginAsync(UserLoginRequest request)
 	{
-		var user = await _userManager.FindByEmailAsync(request.Email);
+		var user = await userManager.FindByEmailAsync(request.Email);
 		if (user == null)
-			return new AppResponse<UserLoginResponse>().SetErrorResponse("email", "Email not found");
+			return AppResponse<UserLoginResponse>.GetErrorResponse("email_not_found", "Email not found");
 
 
-		var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+		var result = await signInManager.CheckPasswordSignInAsync(user, request.Password, true);
 		if (!result.Succeeded)
-			return new AppResponse<UserLoginResponse>().SetErrorResponse("password", result.ToString());
+			return AppResponse<UserLoginResponse>.GetErrorResponse("invalid_password", result.ToString());
 
 		var token = await GenerateUserToken(user);
-		return new AppResponse<UserLoginResponse>().SetSuccessResponse(token);
+		return AppResponse<UserLoginResponse>.GetSuccessResponse(token);
 	}
 }

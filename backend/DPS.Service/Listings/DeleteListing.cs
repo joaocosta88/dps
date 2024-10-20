@@ -27,6 +27,6 @@ public partial class ListingService {
 		listing.IsDeleted = true;
 		_context.Listings.Update(listing);
 
-		return new AppResponse<bool>().SetSuccessResponse(true);
+		return AppResponse<bool>.GetSuccessResponse(true);
 	}
 }

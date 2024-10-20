@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import useAuth from '../Hooks/useAuth';
-import { loginUserAsync } from '../Services/BackendHttpService';
+import useAuth from '../hooks/useAuth';
+import { loginUserAsync } from '../services/BackendHttpService';
 
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -33,14 +33,13 @@ const Login = () => {
         try {
             var response = await loginUserAsync(values.email, values.password)
             if (response.data.success)
-                alert("hereeee")
                 setAuth({
                     user: values.email,
                     accessToken: response.data.data.accessToken, 
                     refreshToken: response.data.data.refreshToken, 
-                    roles: response.data.roles
+                    roles: response.data.data.roles
                 })
-                
+
             if (!response.data.success) {
                 notifications.show({
                     color: "red",

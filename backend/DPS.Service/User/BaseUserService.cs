@@ -11,28 +11,22 @@ namespace DPS.Service.User
 		RoleManager<IdentityRole> roleManager,
 		ApplicationDbContext applicationDbContext,
 		TokenSettings tokenSettings) {
-
-		private readonly UserManager<ApplicationUser> _userManager = userManager;
-		private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-		private readonly RoleManager<IdentityRole> _roleManager = roleManager;
-		private readonly TokenSettings _tokenSettings = tokenSettings;
-		private readonly ApplicationDbContext _context = applicationDbContext;
-
+	    
 		private async Task<UserLoginResponse> GenerateUserToken(ApplicationUser user)
 		{
-			var claims = (from ur in _context.UserRoles
+			var claims = (from ur in applicationDbContext.UserRoles
 						  where ur.UserId == user.Id
-						  join r in _context.Roles on ur.RoleId equals r.Id
-						  join rc in _context.RoleClaims on r.Id equals rc.RoleId
+						  join r in applicationDbContext.Roles on ur.RoleId equals r.Id
+						  join rc in applicationDbContext.RoleClaims on r.Id equals rc.RoleId
 						  select rc)
 			  .Where(rc => !string.IsNullOrEmpty(rc.ClaimValue) && !string.IsNullOrEmpty(rc.ClaimType))
 			  .Select(rc => new Claim(rc.ClaimType!, rc.ClaimValue!))
 			  .Distinct()
 			  .ToList();
 
-			var roleClaims = (from ur in _context.UserRoles
+			var roleClaims = (from ur in applicationDbContext.UserRoles
 							  where ur.UserId == user.Id
-							  join r in _context.Roles on ur.RoleId equals r.Id
+							  join r in applicationDbContext.Roles on ur.RoleId equals r.Id
 							  select r)
 			  .Where(r => !string.IsNullOrEmpty(r.Name))
 			  .Select(r => new Claim(ClaimTypes.Role, r.Name!))
@@ -41,11 +35,19 @@ namespace DPS.Service.User
 
 			claims.AddRange(roleClaims);
 
-			var token = TokenUtils.GetToken(_tokenSettings, user, claims);
-			await _userManager.RemoveAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
-			var refreshToken = await _userManager.GenerateUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
-			await _userManager.SetAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", refreshToken);
-			return new UserLoginResponse() { AccessToken = token, RefreshToken = refreshToken, ExpiresIn = _tokenSettings.TokenExpireSeconds };
+			var token = TokenUtils.GetToken(tokenSettings, user, claims);
+			await userManager.RemoveAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
+			var refreshToken = await userManager.GenerateUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
+			await userManager.SetAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", refreshToken);
+			return new UserLoginResponse()
+			{
+				AccessToken = token, 
+				RefreshToken = refreshToken, 
+				ExpiresIn = tokenSettings.TokenExpireSeconds,
+				Roles = claims.Select(m => m.ToString()).ToList(),
+				RoleClaims = claims.Select(m => m.ToString()).ToList(),
+				
+			};
 		}
 	}
 }

@@ -10,23 +10,23 @@ public partial class S3ServiceTest{
 	{
 		//arrange
 		var filename = $"testFile{Guid.NewGuid()}.txt";
-		await s3Service.UploadFileAsync(new UploadFileToS3Request
+		await _s3Service.UploadFileAsync(new UploadFileToS3Request
 		{
 			Filename = filename,
 			FileStream = Utils.GenerateStreamFromString("test file content")
 		});
 
 		//act
-		var res = await s3Service.GetFile(new GetS3FileRequest
+		var res = await _s3Service.GetFile(new GetS3FileRequest
 		{
 			Filename = filename
 		});
 
-		Assert.IsTrue(res.IsSucceed);
+		Assert.IsTrue(res.Success);
 		Assert.IsTrue(res.Data!.Length > 0);
 
 		//cleanup
-		await s3Service.DeleteFileAsync(new DeleteS3FileRequest
+		await _s3Service.DeleteFileAsync(new DeleteS3FileRequest
 		{
 			Filename = filename
 		});

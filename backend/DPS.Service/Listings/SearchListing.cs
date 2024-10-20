@@ -42,6 +42,6 @@ public partial class  ListingService {
 			ImageUrls = m.ImageUrls
 		}).ToList();
 
-		return new AppResponse<List<SearchListingsResponse>>().SetSuccessResponse(res);
+		return AppResponse<List<SearchListingsResponse>>.GetSuccessResponse(res);
 	}
 }

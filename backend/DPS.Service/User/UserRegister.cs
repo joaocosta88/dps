@@ -4,14 +4,19 @@ using Microsoft.AspNetCore.Identity;
 namespace DPS.Service.User;
 
 public class UserRegisterRequest {
-	public string Username { get; set; } = "";
-	public string Email { get; set; } = "";
-	public string Password { get; set; } = "";
+	public  required string Email { get; init; }
+	public required string Password { get; init; }
 }
 
 public partial class UserService {
 	public async Task<AppResponse<bool>> UserRegisterAsync(UserRegisterRequest request)
 	{
+		var userExists = await userManager.FindByEmailAsync(request.Email);
+		if (userExists != null)
+		{
+			return AppResponse<bool>.GetErrorResponse("duplicate_email");
+		}
+		
 		var user = new ApplicationUser()
 		{
 			UserName = request.Email,
@@ -19,11 +24,11 @@ public partial class UserService {
 
 		};
 
-		var result = await _userManager.CreateAsync(user, request.Password);
+		var result = await userManager.CreateAsync(user, request.Password);
 		if (!result.Succeeded)
-			return new AppResponse<bool>().SetErrorResponse(GetRegisterErrors(result));
+			return AppResponse<bool>.GetErrorResponse("general_register_error", errorDetails: GetRegisterErrors(result));
 
-		return new AppResponse<bool>().SetSuccessResponse(true);
+		return AppResponse<bool>.GetSuccessResponse(true);
 	}
 
 	private Dictionary<string, string[]> GetRegisterErrors(IdentityResult result)

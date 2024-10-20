@@ -9,7 +9,7 @@ namespace DPS.Aws.S3;
 
 public class DeleteS3FileRequest
 {
-	public string Filename { get; set; }
+	public required string Filename { get; set; }
 }
 
 
@@ -29,7 +29,7 @@ public partial class S3Service {
 
 			return new AwsResponse<bool>().SetSuccessResponse(true);
 		}
-		catch(Exception e)
+		catch(Exception)
 		{
 			return new AwsResponse<bool>().SetSuccessResponse(false);
 		}

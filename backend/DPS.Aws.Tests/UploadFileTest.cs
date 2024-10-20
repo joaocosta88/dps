@@ -16,17 +16,17 @@ public partial class S3ServiceTest {
 		var filename = $"testFile{Guid.NewGuid()}.txt";
 
 		//act
-		var res = await s3Service.UploadFileAsync(new S3.UploadFileToS3Request
+		var res = await _s3Service.UploadFileAsync(new S3.UploadFileToS3Request
 		{
 			Filename = filename,
 			FileStream = Utils.GenerateStreamFromString("test file content")
 		});
 
 		//assert
-		Assert.IsTrue(res.IsSucceed);
+		Assert.IsTrue(res.Success);
 
 		//cleanup
-		await s3Service.DeleteFileAsync(new DeleteS3FileRequest
+		await _s3Service.DeleteFileAsync(new DeleteS3FileRequest
 		{
 			Filename = filename
 		});

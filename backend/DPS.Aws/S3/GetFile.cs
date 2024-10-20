@@ -1,16 +1,9 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Amazon.S3.Model;
 
 namespace DPS.Aws.S3;
 
 public class GetS3FileRequest {
-	public string Filename { get; set; }
+	public required string Filename { get; set; }
 }
 
 public partial class S3Service {

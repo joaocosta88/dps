@@ -1,49 +1,40 @@
 ﻿namespace DPS.Service {
-	public class AppResponse<T> {
-		public bool IsSucceed { get; set; } = true;
-		public Dictionary<string, string[]> Messages { get; set; } = [];
-		public T? Data { get; set; }
 
-		internal AppResponse<T> SetSuccessResponse(T data)
+	public class AppResponseError
+	{
+		public required string ErrorCode { get; init; }
+		public string? Message { get; init; }
+		public object? Details { get; init; }
+	}
+	
+	public class AppResponse<T> {
+		public bool Success { get; init; }
+		public T? Data { get; init; }
+		public AppResponseError? Error { get; init; }
+		
+		private AppResponse() {}
+
+		public static AppResponse<T> GetSuccessResponse(T data)
 		{
-			Data = data;
-			return this;
+			return new AppResponse<T>()
+			{
+				Success = true,
+				Data = data,
+			};
 		}
-		internal AppResponse<T> SetSuccessResponse(T data, string key, string value)
+
+		public static AppResponse<T> GetErrorResponse(String errorCode, String? errorMessage = null, object? errorDetails = null)
 		{
-			Data = data;
-			Messages.Add(key, [value]);
-			return this;
-		}
-		internal AppResponse<T> SetSuccessResponse(T data, Dictionary<string, string[]> message)
-		{
-			Data = data;
-			Messages = message;
-			return this;
-		}
-		internal AppResponse<T> SetSuccessResponse(T data, string key, string[] value)
-		{
-			Data = data;
-			Messages.Add(key, value);
-			return this;
-		}
-		internal AppResponse<T> SetErrorResponse(string key, string value)
-		{
-			IsSucceed = false;
-			Messages.Add(key, [value]);
-			return this;
-		}
-		internal AppResponse<T> SetErrorResponse(string key, string[] value)
-		{
-			IsSucceed = false;
-			Messages.Add(key, value);
-			return this;
-		}
-		internal AppResponse<T> SetErrorResponse(Dictionary<string, string[]> message)
-		{
-			IsSucceed = false;
-			Messages = message;
-			return this;
+			return new AppResponse<T>()
+			{
+				Success = false,
+				Error = new AppResponseError()
+				{
+					ErrorCode = errorCode,
+					Message = errorMessage,
+					Details = errorDetails
+				}
+			};
 		}
 	}
 }

@@ -16,23 +16,23 @@ public partial class UserService
 {
 	public async Task<AppResponse<RefreshTokenResponse>> UserRefreshTokenAsync(RefreshTokenRequest request)
 	{
-		var principal = TokenUtils.GetPrincipalFromExpiredToken(_tokenSettings, request.AccessToken);
+		var principal = TokenUtils.GetPrincipalFromExpiredToken(tokenSettings, request.AccessToken);
 
 		if (principal == null || principal.FindFirst("UserName")?.Value == null)
-			return new AppResponse<RefreshTokenResponse>().SetErrorResponse("email", "User not found");
+			return AppResponse<RefreshTokenResponse>.GetErrorResponse("error_extracting_principal_from_token", "User not found");
 
-		var user = await _userManager.FindByNameAsync(principal.FindFirst("UserName")?.Value ?? "");
+		var user = await userManager.FindByNameAsync(principal.FindFirst("UserName")?.Value ?? "");
 
 		if (user == null)
-			return new AppResponse<RefreshTokenResponse>().SetErrorResponse("email", "User not found");
+			return AppResponse<RefreshTokenResponse>.GetErrorResponse("could_not_find_user", "User not found");
 
-		if (!await _userManager.VerifyUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", request.RefreshToken))
+		if (!await userManager.VerifyUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", request.RefreshToken))
 		{
-			return new AppResponse<RefreshTokenResponse>().SetErrorResponse("token", "Refresh token expired");
+			return AppResponse<RefreshTokenResponse>.GetErrorResponse("token_not_valid", "Refresh token expired");
 		}
 
 		var token = await GenerateUserToken(user);
-		return new AppResponse<RefreshTokenResponse>().SetSuccessResponse(new RefreshTokenResponse() { ExpiresIn = token.ExpiresIn, AccessToken = token.AccessToken, RefreshToken = token.RefreshToken });
+		return AppResponse<RefreshTokenResponse>.GetSuccessResponse(new RefreshTokenResponse() { ExpiresIn = token.ExpiresIn, AccessToken = token.AccessToken, RefreshToken = token.RefreshToken });
 
 	}
 }
