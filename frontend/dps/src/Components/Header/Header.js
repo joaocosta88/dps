@@ -2,9 +2,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import { AuthContext } from '../../Providers/AuthProvider.bkp.';
 import { useContext } from 'react';
-import { useAuthContext } from '../../Hooks/useAuthContext';
 
 function Header() {
   // const { user } = useContext(AuthContext);

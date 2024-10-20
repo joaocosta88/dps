@@ -1,8 +1,7 @@
 import { showNotification } from '@mantine/notifications';
 import { refreshAccessToken } from "./BackendHttpService";
 import { useContext } from "react";
-import AuthContext from '../Providers/AuthProvider.bkp.';
-import axios from '../http/axios'
+import axios from '../Http/axios'
 import GeneralHttpError from '../Components/Errors/GeneralHttpError'
 
 export async function makeGetRequest(url, accessToken) {

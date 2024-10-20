@@ -28,7 +28,7 @@ function App() {
 
   return (
     <main className="App">
-        <Header />
+      <Header />
 
 
       <Routes>
@@ -40,15 +40,15 @@ function App() {
 
 
           {/* Private routes */}
-          <Route element = {<RequireAuth />}> 
+          <Route element={<RequireAuth allowedRoles={["http://schemas.microsoft.com/ws/2008/06/identity/claims/role: Administrator"]}/>}>
             <Route path="users" element={<Users />} />
-           </Route>
+          </Route>
           {/* Catch all */}
-          <Route path="*" element={<Missing /> } />
+          <Route path="*" element={<Missing />} />
         </Route>
       </Routes>
     </main>
   );
 }
- 
+
 export default App;

@@ -1,3 +1,5 @@
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import useAuth from '../Hooks/useAuth';
 import { loginUserAsync } from '../Services/BackendHttpService';
 
@@ -6,9 +8,12 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
 
-
 const Login = () => {
-    const { setAuth } = useAuth;
+    const { setAuth } = useAuth();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/ ";
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -28,10 +33,14 @@ const Login = () => {
         try {
             var response = await loginUserAsync(values.email, values.password)
             if (response.data.success)
+                alert("hereeee")
                 setAuth({
-                    email: values.email,
-                    accessToken: response.data.data.accessToken, refreshToken: response.data.data.refreshToken
+                    user: values.email,
+                    accessToken: response.data.data.accessToken, 
+                    refreshToken: response.data.data.refreshToken, 
+                    roles: response.data.roles
                 })
+                
             if (!response.data.success) {
                 notifications.show({
                     color: "red",
@@ -39,6 +48,8 @@ const Login = () => {
                     message: 'Login failed',
                 })
             }
+
+            navigate(from, { replace: true })
         }
         catch (err) {
             alert(err)
