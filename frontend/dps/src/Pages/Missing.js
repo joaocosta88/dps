@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
 
-const Users = () => {
+const Missing = () => {
     return (
         <Container fluid> 
             
-            <div style={{ border: '1px solid black' }}>hello dashboard</div>
+            <div style={{ border: '1px solid black' }}>404</div>
         </Container>
     )
 }
 
-export default Users;
+export default Missing;

@@ -1,13 +1,16 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-
-import Register from './Pages/Register';
-
+import { Routes, Route } from 'react-router-dom'
+import RequireAuth from './Components/RequiredAuth';
 import Header from './Components/Header/Header';
 
-import { Notifications } from '@mantine/notifications';
-import { MantineProvider } from '@mantine/core';
+
 import Login from './Pages/Login';
+import Register from './Pages/Register';
+import Users from './Pages/Users';
+import Missing from './Pages/Missing';
+
+import Layout from './Components/Layout';
 
 
 function App() {
@@ -25,13 +28,27 @@ function App() {
 
   return (
     <main className="App">
-      <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Notifications autoClose={5000} />
         <Header />
-        <Login />
-      </MantineProvider>
+
+
+      <Routes>
+        <Route path="/" element={<Layout />} >
+
+          {/* Public routes  */}
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+
+
+          {/* Private routes */}
+          <Route element = {<RequireAuth />}> 
+            <Route path="users" element={<Users />} />
+           </Route>
+          {/* Catch all */}
+          <Route path="*" element={<Missing /> } />
+        </Route>
+      </Routes>
     </main>
   );
 }
-
+ 
 export default App;

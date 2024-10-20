@@ -1,17 +1,14 @@
-import { useContext } from 'react';
-
-import AuthContext from '../Providers/AuthProvider';
-
+import useAuth from '../Hooks/useAuth';
 import { loginUserAsync } from '../Services/BackendHttpService';
 
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
- 
+
 
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuth;
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -31,8 +28,10 @@ const Login = () => {
         try {
             var response = await loginUserAsync(values.email, values.password)
             if (response.data.success)
-                setAuth({email: values.email, 
-            accessToken: response.data.data.accessToken, refreshToken: response.data.data.refreshToken})
+                setAuth({
+                    email: values.email,
+                    accessToken: response.data.data.accessToken, refreshToken: response.data.data.refreshToken
+                })
             if (!response.data.success) {
                 notifications.show({
                     color: "red",
@@ -42,7 +41,7 @@ const Login = () => {
             }
         }
         catch (err) {
-alert(err)
+            alert(err)
         }
     };
 
