@@ -6,10 +6,12 @@ import { loginUserAsync } from '../services/BackendHttpService';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import { useContext } from 'react';
+import AuthContext from "../providers/AuthProvider";
 
 
 const Login = () => {
-    const { setAuth } = useAuth();
+    const { setAuth } = useContext(AuthContext)
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -32,26 +34,22 @@ const Login = () => {
     const handleSubmit = async (values) => {
         try {
             var response = await loginUserAsync(values.email, values.password)
-            if (response.data.success)
-                setAuth({
-                    user: values.email,
-                    accessToken: response.data.data.accessToken, 
-                    refreshToken: response.data.data.refreshToken, 
-                    roles: response.data.data.roles
-                })
 
-            if (!response.data.success) {
-                notifications.show({
-                    color: "red",
-                    title: 'Error while registering user',
-                    message: 'Login failed',
-                })
-            }
+            setAuth({
+                user: values.email,
+                accessToken: response.data.accessToken,
+                refreshToken: response.data.refreshToken,
+                roles: response.data.roles
+            })
 
             navigate(from, { replace: true })
         }
         catch (err) {
-            alert(err)
+            notifications.show({
+                color: "red",
+                title: 'Error while registering user',
+                message: 'Login failed',
+            })
         }
     };
 

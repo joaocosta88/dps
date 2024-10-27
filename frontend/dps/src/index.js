@@ -18,19 +18,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
 
-      <BrowserRouter>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
-          <Notifications autoClose={5000} />
+    <BrowserRouter>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <Notifications autoClose={5000} />
+        <AuthProvider>
 
           <Routes>
             <Route path='/*' element={<App />} />
 
           </Routes>
-        </MantineProvider>
-      </BrowserRouter>
-    </AuthProvider>
+        </AuthProvider>
+
+      </MantineProvider>
+    </BrowserRouter>
 
   </React.StrictMode>
 );

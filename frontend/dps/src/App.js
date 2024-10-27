@@ -22,7 +22,6 @@ function App() {
   const [appIsLoading, setAppIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log("testing")
     setAppIsLoading(false);
   }, []);
 
@@ -34,7 +33,6 @@ function App() {
   return (
     <main className="App">
       <Header />
-
 
       <Routes>
         <Route path="/" element={<Layout />} >

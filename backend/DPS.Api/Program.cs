@@ -37,31 +37,16 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 	options.TokenLifespan = TimeSpan.FromSeconds(appSettings.RefreshTokenExpireSeconds);
 });
 
-builder.Services.AddAuthentication(options =>
-{
-	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-	options.RequireHttpsMetadata = false;
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		RequireExpirationTime = true,
-		ValidIssuer = appSettings.Issuer,
-		ValidAudience = appSettings.Audience,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey)),
-		ClockSkew = TimeSpan.FromSeconds(0)
-	};
-});
+builder.Services.AddAuthorization();
+
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<IUser, CurrentUser>();
+
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+	.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -123,5 +108,7 @@ app.UseHttpsRedirection();
 app.UseCors("webAppRequests");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapIdentityApi<ApplicationUser>();
+
 app.MapControllers();
 app.Run();
