@@ -1,4 +1,4 @@
-namespace DPS.Api.Controllers.User.CommonModels;
+namespace DPS.Api.Controllers.Users.CommonModels;
 
 public record AuthResponseModel
 {

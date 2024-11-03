@@ -4,6 +4,7 @@ namespace DPS.Service.User;
 
 public class RefreshTokenRequest {
 	public required string RefreshToken { get; init; }
+	public required string AccessToken { get; init; }
 }
 public class RefreshTokenResponse {
 	public required string AccessToken { get; init; }
@@ -15,7 +16,7 @@ public partial class UserService
 {
 	public async Task<AppResponse<RefreshTokenResponse>> UserRefreshTokenAsync(RefreshTokenRequest request)
 	{
-		var principal = TokenUtils.GetPrincipalFromExpiredToken(tokenSettings, request.RefreshToken);
+		var principal = TokenUtils.GetPrincipalFromExpiredToken(tokenSettings, request.AccessToken);
 
 		if (principal == null || principal.FindFirst("UserName")?.Value == null)
 			return AppResponse<RefreshTokenResponse>.GetErrorResponse("error_extracting_principal_from_token", "User not found");

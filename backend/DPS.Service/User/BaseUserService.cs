@@ -35,8 +35,10 @@ namespace DPS.Service.User
 
 			claims.AddRange(roleClaims);
 
-			var token = TokenUtils.GetToken(tokenSettings, user, claims);
+			var token = TokenUtils.GetToken(tokenSettings, user, claims); 
+			
 			await userManager.RemoveAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
+			
 			var refreshToken = await userManager.GenerateUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
 			await userManager.SetAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", refreshToken);
 			return new UserLoginResponse()

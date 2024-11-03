@@ -38,7 +38,26 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 });
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+	options.RequireHttpsMetadata = false;
+	options.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuer = true,
+		ValidateAudience = true,
+		ValidateLifetime = true,
+		ValidateIssuerSigningKey = true,
+		RequireExpirationTime = true,
+		ValidIssuer = "http://localhost:32532",
+		ValidAudience = "http://localhost:3000",
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey)),
+		ClockSkew = TimeSpan.FromSeconds(0)
+	};
+});
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
@@ -61,7 +80,7 @@ builder.Services.AddCors(options =>
 	{
 		builder.AllowAnyHeader()
 		.AllowAnyMethod()
-		.WithOrigins(appSettings.Audience)
+		.WithOrigins("http://localhost:3000", "http://127.0.0.1:3000")
 		.AllowCredentials();
 	});
 });

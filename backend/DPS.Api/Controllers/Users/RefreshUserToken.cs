@@ -1,24 +1,27 @@
-using DPS.Api.Controllers.User.CommonModels;
+using DPS.Api.Controllers.Users.CommonModels;
 using DPS.Service.User;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.User;
+namespace DPS.Api.Controllers.Users;
 
 
-public partial class UserController
+public partial class UsersController
 {
     [HttpPost]
     public async Task<IActionResult> RefreshToken()
     {
-        var oldRefreshToken = Request.Cookies["refreshToken"];
-        if (string.IsNullOrEmpty(oldRefreshToken))
+        var currentRefreshToken = Request.Cookies["refreshToken"];
+        if (string.IsNullOrEmpty(currentRefreshToken))
         {
             return Unauthorized("Refresh token is missing.");
         }
+
+        var currentAccessToken = Request.Headers.Authorization.ToString().Substring("Bearer ".Length).Trim();
         
         RefreshTokenRequest req = new()
         {
-            RefreshToken = oldRefreshToken
+            RefreshToken = currentRefreshToken,
+            AccessToken = currentAccessToken
         };
         
         var res = await userService.UserRefreshTokenAsync(req);
@@ -29,6 +32,7 @@ public partial class UserController
             {
                 HttpOnly = true,
                 Secure = true, // Set to true in production
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(7)
             });
         

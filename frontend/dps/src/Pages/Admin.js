@@ -1,9 +1,16 @@
+import { Link } from "react-router-dom";
 import Users from "./Users";
 
 const Admin = () => {
 
     return (
-        <Users />
+        <section>
+            <br />
+            <h1>Admins page</h1>
+            <Users />
+            <br />
+            <Link to="/admin">Retry</Link>
+        </section>
     );
 }
 

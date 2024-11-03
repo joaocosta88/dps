@@ -1,10 +1,10 @@
-using DPS.Api.Controllers.User.CommonModels;
+using DPS.Api.Controllers.Users.CommonModels;
 using DPS.Service.User;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.User;
+namespace DPS.Api.Controllers.Users;
 
-public partial class UserController
+public partial class UsersController
 {
     [HttpPost]
     public async Task<IActionResult> Login(UserLoginRequest req)
@@ -19,7 +19,8 @@ public partial class UserController
             Response.Cookies.Append("refreshToken", res.Data?.RefreshToken, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, // Set to true in production
+                Secure = false, // Set to true in production
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddDays(7)
             });
         

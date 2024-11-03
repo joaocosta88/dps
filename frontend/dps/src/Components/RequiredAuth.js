@@ -5,17 +5,14 @@ import useAuth from "../hooks/useAuth"
 import AuthContext from "../providers/AuthProvider";
 
 const RequireAuth = ({ allowedRoles }) => {
+    console.log("roles"+JSON.stringify(allowedRoles))
     const { auth } = useContext(AuthContext)
     const location = useLocation();
 
-    alert(JSON.stringify(auth))
-
     return (
-        auth?.roles?.find(role => allowedRoles?.includes(role))
-            ? <Outlet />
-            : auth?.user 
-                ? <Navigate to="/admin" state={{from: location}} replace />
-                : <Navigate to="/login" state={{from: location }} replace />
+        auth?.user
+            ? <Outlet/>
+            : <Navigate to="/login" state={{ from: location }} replace />
     )
 }
 

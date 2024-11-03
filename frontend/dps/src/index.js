@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './providers/AuthProvider';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
@@ -13,26 +13,17 @@ import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-
-    <BrowserRouter>
-      <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Notifications autoClose={5000} />
-        <AuthProvider>
-
-          <Routes>
-            <Route path='/*' element={<App />} />
-
-          </Routes>
-        </AuthProvider>
-
-      </MantineProvider>
-    </BrowserRouter>
-
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <Notifications autoClose={5000} />
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
+    </MantineProvider>
   </React.StrictMode>
 );
 

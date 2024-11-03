@@ -1,4 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from "../http/axios";
 
 import useAuth from '../hooks/useAuth';
 import { loginUserAsync } from '../services/BackendHttpService';
@@ -33,7 +34,15 @@ const Login = () => {
 
     const handleSubmit = async (values) => {
         try {
-            var response = await loginUserAsync(values.email, values.password)
+            const response = await axios.post("/users/login", {
+                "email": values.email,
+                "password": values.password
+            }, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json' // Set the content type
+                }
+            });
 
             setAuth({
                 user: values.email,

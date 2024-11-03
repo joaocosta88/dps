@@ -3,9 +3,9 @@ using DPS.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.User;
+namespace DPS.Api.Controllers.Users;
 
-public partial class UserController
+public partial class UsersController
 {
     [HttpGet]
     [Authorize]
@@ -23,12 +23,5 @@ public partial class UserController
                     .ToList()
             }
         ));
-    }
-
-    [HttpGet("all")]
-    [Authorize]
-    public IActionResult GetAll()
-    {
-        return userService.GetAll().Result;
     }
 }
