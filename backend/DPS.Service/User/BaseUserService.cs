@@ -1,8 +1,8 @@
 ﻿using DPS.Data;
 using DPS.Data.Entities;
-using DPS.Service.User.Common;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using DPS.Service.Common;
 
 namespace DPS.Service.User
 {

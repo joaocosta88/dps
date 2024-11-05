@@ -14,15 +14,10 @@ public partial class UsersController
         {
             return BadRequest(res.Error.Message);
         }
+        
         //store refresh token in cookie
         if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
-            Response.Cookies.Append("refreshToken", res.Data?.RefreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false, // Set to true in production
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
+            StoreRefreshTokenCookie(res.Data.RefreshToken);
         
         return Ok(new AuthResponseModel
         {

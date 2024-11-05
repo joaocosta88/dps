@@ -4,7 +4,6 @@ using DPS.Data.Entities;
 using DPS.Data.Interceptors;
 using DPS.Service.Listings;
 using DPS.Service.User;
-using DPS.Service.User.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DPS.Service.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,18 +23,12 @@ builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
 	options.UseNpgsql(connectionString);
 });
 
-var appSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>() ?? default!;
-builder.Services.AddSingleton(appSettings);
-
-builder.Services.AddIdentityCore<ApplicationUser>()
-			   .AddRoles<IdentityRole>()
-			   .AddSignInManager()
-			   .AddEntityFrameworkStores<ApplicationDbContext>()
-			   .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("REFRESHTOKENPROVIDER");
+var tokenSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>() ?? default!;
+builder.Services.AddSingleton(tokenSettings);
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
-	options.TokenLifespan = TimeSpan.FromSeconds(appSettings.RefreshTokenExpireSeconds);
+	options.TokenLifespan = TimeSpan.FromSeconds(tokenSettings.RefreshTokenExpireSeconds);
 });
 
 builder.Services.AddAuthorization();
@@ -47,17 +41,27 @@ builder.Services.AddAuthentication(options =>
 	options.RequireHttpsMetadata = false;
 	options.TokenValidationParameters = new TokenValidationParameters
 	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		RequireExpirationTime = true,
-		ValidIssuer = "http://localhost:32532",
-		ValidAudience = "http://localhost:3000",
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey)),
+		ValidateIssuer = tokenSettings.ValidateIssuer,
+		ValidateAudience = tokenSettings.ValidateAudience,
+		ValidateLifetime = tokenSettings.ValidateLifetime,
+		ValidateIssuerSigningKey = tokenSettings.ValidateIssuerSigningKey,
+		RequireExpirationTime = tokenSettings.RequireExpirationTime,
+		ValidIssuer = tokenSettings.Issuer,
+		ValidAudience = tokenSettings.Audience,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.SecretKey)),
 		ClockSkew = TimeSpan.FromSeconds(0)
 	};
 });
+
+var cookieSettings = builder.Configuration.GetSection("CookieSettings").Get<CookieSettings>() ?? default!;
+builder.Services.AddSingleton(cookieSettings);
+
+
+builder.Services.AddIdentityCore<ApplicationUser>()
+			   .AddRoles<IdentityRole>()
+			   .AddSignInManager()
+			   .AddEntityFrameworkStores<ApplicationDbContext>()
+			   .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("REFRESHTOKENPROVIDER");
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
@@ -76,11 +80,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("webAppRequests", builder =>
+	options.AddPolicy("webAppRequests", policyBuilder =>
 	{
-		builder.AllowAnyHeader()
+		var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+		policyBuilder.AllowAnyHeader()
 		.AllowAnyMethod()
-		.WithOrigins("http://localhost:3000", "http://127.0.0.1:3000")
+		.WithOrigins(allowedOrigins)
 		.AllowCredentials();
 	});
 });
@@ -114,7 +119,7 @@ builder.Services.AddSwaggerGen(config =>
 });
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
+if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();

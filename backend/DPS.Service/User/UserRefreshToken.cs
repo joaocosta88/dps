@@ -1,4 +1,4 @@
-﻿using DPS.Service.User.Common;
+﻿using DPS.Service.Common;
 
 namespace DPS.Service.User;
 

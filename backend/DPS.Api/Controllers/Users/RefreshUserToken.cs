@@ -10,12 +10,14 @@ public partial class UsersController
     [HttpPost]
     public async Task<IActionResult> RefreshToken()
     {
-        var currentRefreshToken = Request.Cookies["refreshToken"];
+        //get refresh token from cookie
+        var currentRefreshToken = GetRefreshTokenCookie();
         if (string.IsNullOrEmpty(currentRefreshToken))
         {
             return Unauthorized("Refresh token is missing.");
         }
 
+        //get access token from header
         var currentAccessToken = Request.Headers.Authorization.ToString().Substring("Bearer ".Length).Trim();
         
         RefreshTokenRequest req = new()
@@ -24,17 +26,10 @@ public partial class UsersController
             AccessToken = currentAccessToken
         };
         
+        //create and store refresh token in cookie
         var res = await userService.UserRefreshTokenAsync(req);
-      
-        //store refresh token in cookie
         if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
-            Response.Cookies.Append("refreshToken", res.Data?.RefreshToken, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true, // Set to true in production
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
+            StoreRefreshTokenCookie(res.Data.RefreshToken);
         
         return Ok(new AuthResponseModel
         {

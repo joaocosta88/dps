@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DPS.Common;
+﻿namespace DPS.Common;
 public static class Utils {
 	public static Stream GenerateStreamFromString(string s)
 	{

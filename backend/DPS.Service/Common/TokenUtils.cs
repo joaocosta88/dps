@@ -1,10 +1,10 @@
-﻿using DPS.Data.Entities;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DPS.Data.Entities;
+using Microsoft.IdentityModel.Tokens;
 
-namespace DPS.Service.User.Common;
+namespace DPS.Service.Common;
 
 public static class TokenUtils {
 	public static string GetToken(TokenSettings appSettings, ApplicationUser user, List<Claim> roleClaims)
@@ -32,16 +32,16 @@ public static class TokenUtils {
 		return tokenString;
 	}
 
-	public static ClaimsPrincipal GetPrincipalFromExpiredToken(TokenSettings appSettings, string token)
+	public static ClaimsPrincipal GetPrincipalFromExpiredToken(TokenSettings tokenSettings, string token)
 	{
 		var tokenValidationParameters = new TokenValidationParameters
 		{
 			ValidateIssuer = true,
 			ValidateAudience = true,
-			ValidAudience = appSettings.Audience,
-			ValidIssuer = appSettings.Issuer,
+			ValidAudience = tokenSettings.Audience,
+			ValidIssuer = tokenSettings.Issuer,
 			ValidateLifetime = false,
-			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey))
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.SecretKey))
 		};
 
 		var principal = new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
