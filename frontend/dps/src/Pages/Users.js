@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useRefreshToken from "../hooks/useRefreshToken";
+import { routes } from "../http/routes"
 
 const Users = () => {
     const [users, setUsers] = useState();
@@ -13,7 +14,7 @@ const Users = () => {
 
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get("/users/all", {
+                const response = await axiosPrivate.get(routes.auth.all, {
                     signal: controller.signal,
                 });
 

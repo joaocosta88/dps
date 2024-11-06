@@ -1,11 +1,12 @@
 import axios from "../http/axios";
 import useAuth from "./useAuth";
+import { routes } from "../http/routes"
 
 const useRefreshToken = () => {
-    const {auth, setAuth} = useAuth();
+    const {auth} = useAuth();
 
     const refresh = async() => {
-        const response = await axios.post('http://localhost:5263/Users/RefreshToken', {},
+        const response = await axios.post(routes.auth.refreshToken, {},
             {
                 headers: {
                     'Authorization': `Bearer ${auth.accessToken}`, 
@@ -13,15 +14,7 @@ const useRefreshToken = () => {
                 withCredentials: true,
             })
         
-
-        setAuth(prev => {
-            console.log("dsfsdfsdfsdfsdfsdf"+JSON.stringify(prev))
-            console.log("aaaaaaaa"+JSON.stringify)
-            console.log(response.data.accessToken)
-
-            return {...prev, accessToken: response.data.accessToken }
-        })
-        return response.data.accessToken;
+        return response;
     }
 
     return refresh;

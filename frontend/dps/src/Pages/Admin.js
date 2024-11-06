@@ -9,7 +9,7 @@ const Admin = () => {
             <h1>Admins page</h1>
             <Users />
             <br />
-            <Link to="/admin">Retry</Link>
+            <Link to="#">Retry</Link>
         </section>
     );
 }

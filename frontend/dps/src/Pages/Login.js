@@ -1,18 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from "../http/axios";
-
-import useAuth from '../hooks/useAuth';
-import { loginUserAsync } from '../services/BackendHttpService';
-
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useContext } from 'react';
-import AuthContext from "../providers/AuthProvider";
-
+import axios from "../http/axios";
+import useAuth from '../hooks/useAuth';
+import { routes } from "../http/routes"
 
 const Login = () => {
-    const { setAuth } = useContext(AuthContext)
+    const {setAuth} = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,15 +29,10 @@ const Login = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await axios.post("/users/login", {
+            const response = await axios.post(routes.auth.login, {
                 "email": values.email,
                 "password": values.password
-            }, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json' // Set the content type
-                }
-            });
+            }, {});
 
             setAuth({
                 user: values.email,

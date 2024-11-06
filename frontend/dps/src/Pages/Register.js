@@ -2,7 +2,8 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
 
-import { registerUserAsync } from '../services/BackendHttpService';
+import axios from "../http/axios";
+import { routes } from "../http/routes"
 
 const Register = () => {
 
@@ -25,7 +26,11 @@ const Register = () => {
 
 
     const handleSubmit = async (values) => {
-        var response = await registerUserAsync(values.email, values.password)
+        var response = await axios.post(routes.auth.register, {
+            "email":values.email,
+            "password":values.password
+        }, {})
+
         if (!response.data.success)
         {
             if (response.data.error.errorCode === "duplicate_email") {

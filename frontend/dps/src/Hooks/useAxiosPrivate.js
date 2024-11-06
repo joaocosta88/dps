@@ -1,14 +1,13 @@
-import axios, { axiosPrivate } from "../http/axios";
+import { axiosPrivate } from "../http/axios";
 import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
-import { useContext } from 'react';
-import AuthContext from "../providers/AuthProvider";
 
-const useAxiosPrivate = () => {
+const useAxiosPrivate = () => {
     const refreshAsync = useRefreshToken();
-    const { auth } = useContext(AuthContext)
-    console.log("tokennnnn" +auth?.accessToken)
+    const { auth } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const requestInteceptor = axiosPrivate.interceptors.request.use(
@@ -25,7 +24,7 @@ const useAxiosPrivate = () => {
             response => response,
             async (error) => {
                 const prevRequest = error?.config;
-                if (error?.response?.status === 401 && !prevRequest?.sent ) {
+                if (error?.response?.status === 401 && !prevRequest?.sent) {
                     prevRequest.sent = true //prevent endless loop of calling this multiple times 
 
                     const newAccessToken = await refreshAsync();
@@ -33,13 +32,14 @@ const useAxiosPrivate = () => {
                     return axiosPrivate(prevRequest)
                 }
 
-                return Promise.reject(error);
+                //return Promise.reject(error);
+                navigate('/');
             }
         )
 
         return () => {
-        axiosPrivate.interceptors.request.eject(requestInteceptor)
-        axiosPrivate.interceptors.response.eject(responseInterceptor)
+            axiosPrivate.interceptors.request.eject(requestInteceptor)
+            axiosPrivate.interceptors.response.eject(responseInterceptor)
         }
     }, [auth, refreshAsync]);
 
