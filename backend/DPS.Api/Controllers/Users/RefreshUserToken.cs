@@ -30,6 +30,9 @@ public partial class UsersController
         var res = await userService.UserRefreshTokenAsync(req);
         if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
             StoreRefreshTokenCookie(res.Data.RefreshToken);
+
+        if (!res.Success)
+            return Unauthorized();
         
         return Ok(new AuthResponseModel
         {

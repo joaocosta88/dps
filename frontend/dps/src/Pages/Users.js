@@ -1,25 +1,21 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useRefreshToken from "../hooks/useRefreshToken";
-import { routes } from "../http/routes"
 
 const Users = () => {
     const [users, setUsers] = useState();
-    const refresh = useRefreshToken();
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
-        let isMounted = true;
         const controller = new AbortController();
 
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get(routes.auth.all, {
-                    signal: controller.signal,
-                });
-
-                console.log(response.data);
-                isMounted && setUsers(response.data)
+                const response = await axiosPrivate.get("/users/all", 
+                    { 
+                        ...axiosPrivate.defaults,
+                        signal: controller.signal 
+                    });
+                setUsers(response.data);
             } catch (err) {
                 console.error(err);
             }
@@ -28,34 +24,24 @@ const Users = () => {
         getUsers();
 
         return () => {
-            isMounted = false;
             controller.abort();
-        }
-    }, [])
+        };
+    }, []);
 
     return (
         <article>
-            <h2>Users list</h2>
-            {users?.length
-                ? (
-                    <ul>
-                        {users.map((user, i) =>
-                            <li key={i}>{user?.email}</li>)}
-                    </ul>)
-                : <p>No users to display</p>
-            }
-            <button onClick={() => {
-                try {
-                    refresh()
-                }
-                catch (err) {
-                    console.log(err);
-                }
-            }
-            }> Refresh</button>
-            <br />
-        </article >
-    )
-}
+            <h2>Users List</h2>
+            {users?.length ? (
+                <ul>
+                    {users.map((user, i) => (
+                        <li key={i}>{user?.userName}</li>
+                    ))}
+                </ul>
+            ) : (
+                <p></p>
+            )}
+        </article>
+    );
+};
 
 export default Users;

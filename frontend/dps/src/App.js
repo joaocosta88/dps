@@ -10,7 +10,7 @@ import Register from './pages/Register';
 import Missing from './pages/Missing';
 import Admin from './pages/Admin';
 import Home from './pages/Home';
-
+import LinkPage from './pages/LinkPage';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
 
@@ -40,10 +40,11 @@ function App() {
           {/* Public routes  */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="linkpage" element={<LinkPage />} />
           <Route path="unauthorized" element={<Unauthorized />} />
           
           <Route element={<RequireAuth />}>
-            <Route path="home" element={<Home />} />
+            <Route path="/" element={<Home />} />
           </Route>
 
           {/* Private routes */}

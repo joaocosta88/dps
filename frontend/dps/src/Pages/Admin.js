@@ -9,7 +9,9 @@ const Admin = () => {
             <h1>Admins page</h1>
             <Users />
             <br />
-            <Link to="#">Retry</Link>
+            <div className="flexGrow">
+                <Link to="/">Home</Link>
+            </div>
         </section>
     );
 }

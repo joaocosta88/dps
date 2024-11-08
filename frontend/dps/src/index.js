@@ -15,7 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <Notifications autoClose={5000} />
       <AuthProvider>
@@ -24,7 +24,7 @@ root.render(
         </BrowserRouter>
       </AuthProvider>
     </MantineProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
