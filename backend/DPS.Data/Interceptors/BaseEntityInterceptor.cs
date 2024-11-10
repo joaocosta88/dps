@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DPS.Data.Entities;
+using DPS.Data.Entities.Common;
 
 namespace DPS.Data.Interceptors;
 public class BaseEntityInterceptor : SaveChangesInterceptor {
@@ -39,7 +35,7 @@ public class BaseEntityInterceptor : SaveChangesInterceptor {
 	{
 		if (context == null) return;
 
-		foreach (var entry in context.ChangeTracker.Entries<BaseEntity>())
+		foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
 		{
 			if (entry.State is EntityState.Added or EntityState.Modified || entry.HasChangedOwnedEntities())
 			{

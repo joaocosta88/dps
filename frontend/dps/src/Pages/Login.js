@@ -37,7 +37,6 @@ const Login = () => {
             setAuth({
                 user: values.email,
                 accessToken: response.data.accessToken,
-                refreshToken: response.data.refreshToken,
                 roles: response.data.roles
             })
 

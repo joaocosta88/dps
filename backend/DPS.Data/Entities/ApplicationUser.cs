@@ -2,7 +2,7 @@
 
 namespace DPS.Data.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser, IUser
     {
     }
 }

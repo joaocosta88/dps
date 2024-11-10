@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom'
 import RequireAuth from './components/RequiredAuth';
 import Header from './components/Header/Header';
-
+import PersistLogin from './components/PersistLogin';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -13,10 +13,6 @@ import Home from './pages/Home';
 import LinkPage from './pages/LinkPage';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
-
-const ROLES = {
-  Admin: 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role: Administrator'
-}
 
 function App() {
   const [appIsLoading, setAppIsLoading] = useState(true);
@@ -42,20 +38,21 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="linkpage" element={<LinkPage />} />
           <Route path="unauthorized" element={<Unauthorized />} />
-          
-          <Route element={<RequireAuth />}>
-            <Route path="/" element={<Home />} />
-          </Route>
 
           {/* Private routes */}
-          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-            <Route path="admin" element={<Admin />} />
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth />}>
+              <Route path="/" element={<Home />} />
+            </Route>
+            <Route element={<RequireAuth />}>
+              <Route path="admin" element={<Admin />} />
+            </Route>
           </Route>
           {/* Catch all */}
           <Route path="*" element={<Missing />} />
         </Route>
       </Routes>
-    </main>
+    </main >
   );
 }
 

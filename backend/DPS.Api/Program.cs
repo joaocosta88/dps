@@ -60,8 +60,7 @@ builder.Services.AddSingleton(cookieSettings);
 builder.Services.AddIdentityCore<ApplicationUser>()
 			   .AddRoles<IdentityRole>()
 			   .AddSignInManager()
-			   .AddEntityFrameworkStores<ApplicationDbContext>()
-			   .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("REFRESHTOKENPROVIDER");
+			   .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
@@ -83,6 +82,7 @@ builder.Services.AddCors(options =>
 	options.AddPolicy("webAppRequests", policyBuilder =>
 	{
 		var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+		
 		policyBuilder.AllowAnyHeader()
 		.AllowAnyMethod()
 		.WithOrigins(allowedOrigins)

@@ -16,14 +16,10 @@ public partial class UsersController
         {
             return Unauthorized("Refresh token is missing.");
         }
-
-        //get access token from header
-        var currentAccessToken = Request.Headers.Authorization.ToString().Substring("Bearer ".Length).Trim();
         
         RefreshTokenRequest req = new()
         {
             RefreshToken = currentRefreshToken,
-            AccessToken = currentAccessToken
         };
         
         //create and store refresh token in cookie

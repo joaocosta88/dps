@@ -2,6 +2,7 @@
 using DPS.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using DPS.Service.Common;
 
 namespace DPS.Service.User
@@ -12,44 +13,64 @@ namespace DPS.Service.User
 		ApplicationDbContext applicationDbContext,
 		TokenSettings tokenSettings) {
 	    
-		private async Task<UserLoginResponse> GenerateUserToken(ApplicationUser user)
+		private async Task<UserLoginResponse> GenerateUserTokenAsync(ApplicationUser user)
 		{
-			var claims = (from ur in applicationDbContext.UserRoles
-						  where ur.UserId == user.Id
-						  join r in applicationDbContext.Roles on ur.RoleId equals r.Id
-						  join rc in applicationDbContext.RoleClaims on r.Id equals rc.RoleId
-						  select rc)
-			  .Where(rc => !string.IsNullOrEmpty(rc.ClaimValue) && !string.IsNullOrEmpty(rc.ClaimType))
-			  .Select(rc => new Claim(rc.ClaimType!, rc.ClaimValue!))
-			  .Distinct()
-			  .ToList();
-
-			var roleClaims = (from ur in applicationDbContext.UserRoles
-							  where ur.UserId == user.Id
-							  join r in applicationDbContext.Roles on ur.RoleId equals r.Id
-							  select r)
-			  .Where(r => !string.IsNullOrEmpty(r.Name))
-			  .Select(r => new Claim(ClaimTypes.Role, r.Name!))
-			  .Distinct()
-			  .ToList();
-
-			claims.AddRange(roleClaims);
-
-			var token = TokenUtils.GetToken(tokenSettings, user, claims); 
+			var res = GenerateAccessToken(user);
+			var refreshToken = await GenerateRefreshTokenAsync(user);
 			
-			await userManager.RemoveAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
-			
-			var refreshToken = await userManager.GenerateUserTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken");
-			await userManager.SetAuthenticationTokenAsync(user, "REFRESHTOKENPROVIDER", "RefreshToken", refreshToken);
 			return new UserLoginResponse()
 			{
-				AccessToken = token, 
+				AccessToken = res.Item1, 
 				RefreshToken = refreshToken, 
 				ExpiresIn = tokenSettings.TokenExpireSeconds,
-				Roles = claims.Select(m => m.ToString()).ToList(),
-				RoleClaims = claims.Select(m => m.ToString()).ToList(),
-				
+				Roles = res.Item2
 			};
+		}
+
+		private (string, IList<string>) GenerateAccessToken(ApplicationUser user)
+		{
+			var claims = (from ur in applicationDbContext.UserRoles
+					where ur.UserId == user.Id
+					join r in applicationDbContext.Roles on ur.RoleId equals r.Id
+					join rc in applicationDbContext.RoleClaims on r.Id equals rc.RoleId
+					select rc)
+				.Where(rc => !string.IsNullOrEmpty(rc.ClaimValue) && !string.IsNullOrEmpty(rc.ClaimType))
+				.Select(rc => new Claim(rc.ClaimType!, rc.ClaimValue!))
+				.Distinct()
+				.ToList();
+
+			var roleClaims = (from ur in applicationDbContext.UserRoles
+					where ur.UserId == user.Id
+					join r in applicationDbContext.Roles on ur.RoleId equals r.Id
+					select r)
+				.Where(r => !string.IsNullOrEmpty(r.Name))
+				.Select(r => new Claim(ClaimTypes.Role, r.Name!))
+				.Distinct()
+				.ToList();
+
+			claims.AddRange(roleClaims);
+			var claimsResult = claims.Select(m => m.ToString()).ToList();
+
+			var accessToken = TokenUtils.GetToken(tokenSettings, user, claims);
+			return (accessToken, claimsResult);
+		}
+
+		private async Task<string> GenerateRefreshTokenAsync(ApplicationUser user)
+		{
+			var token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+			var refreshToken = new UserRefreshToken
+			{
+				Id = default,
+				RefreshToken = token,
+				IsValid = true,
+				ExpirationDate = DateTime.Now.AddSeconds(tokenSettings.RefreshTokenExpireSeconds),
+				User = user
+			};
+			applicationDbContext.UserRefreshTokens.Add(refreshToken);
+			await applicationDbContext.SaveChangesAsync();
+
+			return token;
 		}
 	}
 }

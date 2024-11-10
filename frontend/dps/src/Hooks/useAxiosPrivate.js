@@ -36,7 +36,9 @@ const useAxiosPrivate = () => {
                         const response = await refreshAsync();
 
                         setAuth(prev => {
-                            return { ...prev, accessToken: response.data.accessToken };
+                            return { ...prev, 
+                                accessToken: response.data.accessToken,
+                            };
                         });
 
                         prevRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`;

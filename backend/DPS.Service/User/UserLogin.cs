@@ -9,7 +9,6 @@ public class UserLoginResponse {
 	public required string RefreshToken { get; init; }
 	public required int ExpiresIn { get; init; }
 	public required IList<string> Roles { get; init; }
-	public required IList<string> RoleClaims { get; init; }
 }
 
 public partial class UserService {
@@ -24,7 +23,7 @@ public partial class UserService {
 		if (!result.Succeeded)
 			return AppResponse<UserLoginResponse>.GetErrorResponse("invalid_password", result.ToString());
 
-		var token = await GenerateUserToken(user);
+		var token = await GenerateUserTokenAsync(user);
 		return AppResponse<UserLoginResponse>.GetSuccessResponse(token);
 	}
 }
