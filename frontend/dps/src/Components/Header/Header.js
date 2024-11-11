@@ -3,9 +3,11 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import useAuth from "../../hooks/useAuth";
-
+import useLogout from "../../hooks/useLogout";
+ 
 function Header() {
   const { auth } = useAuth();
+  const logout = useLogout();
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -27,7 +29,7 @@ function Header() {
                 </Nav.Item> */}
             {auth?.accessToken ? (
               <NavDropdown title='asdasd' id="user-nav-dropdown" align="end">
-                <NavDropdown.Item>Logout</NavDropdown.Item>
+                <NavDropdown.Item onClick={async () => await logout()}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
               <>

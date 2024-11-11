@@ -1,15 +1,8 @@
-import { useNavigate, Link } from "react-router-dom";
-import useAuth from '../hooks/useAuth';
-
+import { Link } from "react-router-dom";
+import useLogout from "../hooks/useLogout";
 
 const Home = () => {
-    const { setAuth } = useAuth();
-    const navigate = useNavigate();
-
-    const logout = async () => {
-        setAuth({});
-        navigate('/');
-    }
+    const logout = useLogout();
 
     return (
         <section>
@@ -21,7 +14,7 @@ const Home = () => {
             <br />
             <Link to="/admin">Go to the admin page</Link>
             <div className="flexGrow">
-                <button onClick={logout}>Sign Out</button>
+                <button onClick={async() => await logout()}>Sign Out</button>
             </div>
         </section>
     );

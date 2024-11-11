@@ -12,6 +12,7 @@ public partial class UsersController
     {
         //get refresh token from cookie
         var currentRefreshToken = GetRefreshTokenCookie();
+        
         if (string.IsNullOrEmpty(currentRefreshToken))
         {
             return Unauthorized("Refresh token is missing.");
@@ -24,11 +25,11 @@ public partial class UsersController
         
         //create and store refresh token in cookie
         var res = await userService.UserRefreshTokenAsync(req);
-        if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
-            StoreRefreshTokenCookie(res.Data.RefreshToken, res.Data.IsSessionToken);
-
         if (!res.Success)
             return Unauthorized();
+        
+        if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
+            StoreRefreshTokenCookie(res.Data.RefreshToken, res.Data.IsSessionToken);
         
         return Ok(new AuthResponseModel
         {
