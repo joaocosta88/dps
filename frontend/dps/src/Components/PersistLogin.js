@@ -14,7 +14,6 @@ const PersistLogin = () => {
                 var response = await refresh();
 
                 setAuth(prev => {
-                    console.log("previous state " +JSON.stringify(prev))
                     return { ...prev, 
                         roles: response.data.roles,
                         accessToken: response.data.accessToken

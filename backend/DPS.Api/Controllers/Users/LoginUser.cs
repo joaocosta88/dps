@@ -12,12 +12,12 @@ public partial class UsersController
         var res = await userService.UserLoginAsync(req);
         if (!res.Success)
         {
-            return BadRequest(res.Error.Message);
+            return BadRequest(res?.Error?.Message);
         }
         
         //store refresh token in cookie
-        if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
-            StoreRefreshTokenCookie(res.Data.RefreshToken);
+        if (!string.IsNullOrWhiteSpace(res?.Data?.RefreshToken))
+            StoreRefreshTokenCookie(res.Data.RefreshToken, isSession: !req.KeepLoggedIn);
         
         return Ok(new AuthResponseModel
         {

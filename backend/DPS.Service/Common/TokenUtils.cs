@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using DPS.Data.Entities;
 using Microsoft.IdentityModel.Tokens;
@@ -8,7 +9,7 @@ namespace DPS.Service.Common;
 
 public static class TokenUtils
 {
-    public static string GetToken(TokenSettings appSettings, ApplicationUser user, List<Claim> roleClaims)
+    public static string GetAccessToken(TokenSettings appSettings, ApplicationUser user, IList<Claim> roleClaims)
     {
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.SecretKey));
         var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
@@ -32,26 +33,8 @@ public static class TokenUtils
         return tokenString;
     }
 
-    public static ClaimsPrincipal GetPrincipalFromExpiredToken(TokenSettings tokenSettings, string token)
+    public static string GetRefreshToken()
     {
-        var tokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = tokenSettings.Audience,
-            ValidIssuer = tokenSettings.Issuer,
-            ValidateLifetime = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.SecretKey))
-        };
-
-        var principal =
-            new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters,
-                out SecurityToken securityToken);
-        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                StringComparison.InvariantCultureIgnoreCase))
-            throw new SecurityTokenException("GetPrincipalFromExpiredToken Token is not validated");
-
-        return principal;
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
     }
 }

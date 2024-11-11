@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
+import { Group, Box, PasswordInput, TextInput, Button, Checkbox } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import axios from "../http/axios";
@@ -7,7 +7,7 @@ import useAuth from '../hooks/useAuth';
 import { routes } from "../http/routes"
 
 const Login = () => {
-    const {setAuth} = useAuth();
+    const { setAuth } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -19,6 +19,7 @@ const Login = () => {
         initialValues: {
             email: '',
             password: '',
+            keepLoggedIn: false,
         },
 
         // functions will be used to validate values at corresponding key
@@ -28,10 +29,12 @@ const Login = () => {
     });
 
     const handleSubmit = async (values) => {
+        console.log(JSON.stringify(values))
         try {
             const response = await axios.post(routes.auth.login, {
                 "email": values.email,
-                "password": values.password
+                "password": values.password,
+                "keepLoggedIn": values.keepLoggedIn
             }, {});
 
             setAuth({
@@ -69,6 +72,11 @@ const Login = () => {
                     {...form.getInputProps('password')}
                 />
 
+                <Checkbox
+                    key={form.key('keepLoggedIn')}
+                    label="Keep logged in?"
+                    {...form.getInputProps("keepLoggedIn", { type: "checkbox" })}
+                />
                 <Group justify="flex-end" mt="md">
                     <Button type="submit">Submit</Button>
                 </Group>

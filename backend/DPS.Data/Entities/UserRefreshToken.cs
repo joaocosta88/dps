@@ -8,4 +8,5 @@ public class UserRefreshToken : BaseEntity
     public bool IsValid { get; set; }
     public DateTimeOffset ExpirationDate { get; set; }
     public ApplicationUser User { get; set; }
+    public bool IsSessionToken { get; set; }
 }

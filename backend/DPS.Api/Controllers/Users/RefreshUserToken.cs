@@ -19,13 +19,13 @@ public partial class UsersController
         
         RefreshTokenRequest req = new()
         {
-            RefreshToken = currentRefreshToken,
+            CurrentRefreshToken = currentRefreshToken,
         };
         
         //create and store refresh token in cookie
         var res = await userService.UserRefreshTokenAsync(req);
         if (!string.IsNullOrWhiteSpace(res.Data?.RefreshToken))
-            StoreRefreshTokenCookie(res.Data.RefreshToken);
+            StoreRefreshTokenCookie(res.Data.RefreshToken, res.Data.IsSessionToken);
 
         if (!res.Success)
             return Unauthorized();
