@@ -2,7 +2,7 @@
 using DPS.Service.Common;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPS.Service.User;
+namespace DPS.Service.Auth;
 
 public class RefreshTokenRequest {
 	public required string CurrentRefreshToken { get; init; }
@@ -14,7 +14,7 @@ public class RefreshTokenResponse {
 	public required bool IsSessionToken { get; init; }
 }
 
-public partial class UserService
+public partial class AuthService
 {
 	public async Task<AppResponse<RefreshTokenResponse>> UserRefreshTokenAsync(RefreshTokenRequest request)
 	{

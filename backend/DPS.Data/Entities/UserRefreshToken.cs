@@ -7,7 +7,7 @@ namespace DPS.Data.Entities;
 public class UserRefreshToken : BaseEntity
 {
     public string RefreshToken { get; set; }
-    public string PreviousRefreshToken { get; set; }
+    public string? PreviousRefreshToken { get; set; }
     public bool IsValid { get; set; }
     public DateTimeOffset ExpirationDate { get; set; }
     public ApplicationUser User { get; set; }

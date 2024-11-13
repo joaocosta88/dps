@@ -1,13 +1,12 @@
-using DPS.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DPS.Service.User;
+namespace DPS.Service.Auth;
 
 public class LogoutRequest {
     public required string CurrentRefreshToken { get; init; }
 }
 
-public partial class UserService
+public partial class AuthService
 {
     public async Task<AppResponse<bool>> LogoutUserAsync(LogoutRequest request)
     {

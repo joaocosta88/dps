@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DPS.Service.Auth;
 using DPS.Service.Common;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,11 +65,9 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<IUser, CurrentUser>();
-
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-	.AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -132,7 +131,6 @@ app.UseHttpsRedirection();
 app.UseCors("webAppRequests");
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapIdentityApi<ApplicationUser>();
 
 app.MapControllers();
 app.Run();

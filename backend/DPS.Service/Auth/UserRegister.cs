@@ -1,14 +1,14 @@
 ﻿using DPS.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace DPS.Service.User;
+namespace DPS.Service.Auth;
 
 public class UserRegisterRequest {
 	public  required string Email { get; init; }
 	public required string Password { get; init; }
 }
 
-public partial class UserService {
+public partial class AuthService {
 	public async Task<AppResponse<bool>> UserRegisterAsync(UserRegisterRequest request)
 	{
 		var userExists = await userManager.FindByEmailAsync(request.Email);

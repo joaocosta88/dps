@@ -1,10 +1,13 @@
 export const routes = {
     auth: {
-        register: "/users/register",
-        login: "/users/login",
-        refreshToken: "/users/refreshtoken",
+        register: "/auth/register",
+        login: "/auth/login",
+        refreshToken: "/auth/refreshtoken",
+        logout: "/auth/logout",
+    },
+    users: {
         me: "/users/profile",
-        all:"/users/all"
+        all: "/users/all"
     },
     listing: {
         add: "/api/listing",

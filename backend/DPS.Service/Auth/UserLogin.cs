@@ -1,7 +1,7 @@
 ﻿using DPS.Data.Entities;
 using DPS.Service.Common;
 
-namespace DPS.Service.User;
+namespace DPS.Service.Auth;
 
 public class UserLoginRequest
 {
@@ -17,7 +17,7 @@ public class UserLoginResponse
     public required int ExpiresIn { get; init; }
 }
 
-public partial class UserService
+public partial class AuthService
 {
     public async Task<AppResponse<UserLoginResponse>> UserLoginAsync(UserLoginRequest request)
     {

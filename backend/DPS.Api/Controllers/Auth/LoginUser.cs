@@ -1,18 +1,18 @@
-using DPS.Api.Controllers.Users.CommonModels;
-using DPS.Service.User;
+using DPS.Api.Controllers.Auth.CommonModels;
+using DPS.Service.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.Users;
+namespace DPS.Api.Controllers.Auth;
 
-public partial class UsersController
+public partial class AuthController
 {
     [HttpPost]
     public async Task<IActionResult> Login(UserLoginRequest req)
     {
-        var res = await userService.UserLoginAsync(req);
+        var res = await authService.UserLoginAsync(req);
         if (!res.Success)
         {
-            return BadRequest(res?.Error?.Message);
+            return BadRequest(res.Error?.Message);
         }
         
         //store refresh token in cookie

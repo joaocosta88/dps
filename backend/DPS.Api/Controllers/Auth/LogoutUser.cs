@@ -1,13 +1,11 @@
-using DPS.Service.User;
-using Microsoft.AspNetCore.Authorization;
+using DPS.Service.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.Users;
+namespace DPS.Api.Controllers.Auth;
 
-public partial class UsersController
+public partial class AuthController
 {
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> LogoutAsync()
     {
         var currentRefreshToken = GetRefreshTokenCookie();
@@ -16,7 +14,7 @@ public partial class UsersController
             return Unauthorized("Refresh token is missing.");
         }
 
-        await userService.LogoutUserAsync(new LogoutRequest()
+        await authService.LogoutUserAsync(new LogoutRequest()
         {
             CurrentRefreshToken = currentRefreshToken
         });

@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace DPS.Api.Controllers;
+namespace DPS.Api.Controllers.Listings;
+
 [Route("api/[controller]")]
 [ApiController]
-public class ListingController(ListingService listingService) : ControllerBase {
+public class ListingsController(ListingService listingService) : ControllerBase {
 
 	[HttpPost]
 	[Authorize]

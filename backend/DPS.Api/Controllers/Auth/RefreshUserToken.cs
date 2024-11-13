@@ -1,11 +1,10 @@
-using DPS.Api.Controllers.Users.CommonModels;
-using DPS.Service.User;
+using DPS.Api.Controllers.Auth.CommonModels;
+using DPS.Service.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.Users;
+namespace DPS.Api.Controllers.Auth;
 
-
-public partial class UsersController
+public partial class AuthController
 {
     [HttpPost]
     public async Task<IActionResult> RefreshToken()
@@ -24,7 +23,7 @@ public partial class UsersController
         };
         
         //create and store refresh token in cookie
-        var res = await userService.UserRefreshTokenAsync(req);
+        var res = await authService.UserRefreshTokenAsync(req);
         if (!res.Success)
             return Unauthorized();
         

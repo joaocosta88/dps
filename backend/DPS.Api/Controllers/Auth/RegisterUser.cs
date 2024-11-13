@@ -1,14 +1,14 @@
 using DPS.Service;
-using DPS.Service.User;
+using DPS.Service.Auth;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DPS.Api.Controllers.Users;
+namespace DPS.Api.Controllers.Auth;
 
-public partial class UsersController
+public partial class AuthController
 {
     [HttpPost]
     public async Task<AppResponse<bool>> Register(UserRegisterRequest req)
     {
-        return await userService.UserRegisterAsync(req);
+        return await authService.UserRegisterAsync(req);
     }
 }

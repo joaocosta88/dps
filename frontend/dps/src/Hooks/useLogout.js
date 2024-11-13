@@ -1,6 +1,7 @@
 import axios from '../http/axios'
 import { useNavigate } from 'react-router-dom';
 import useAuth from './useAuth'
+import { routes } from '../http/routes';
 
 const useLogout = () => {
     const { setAuth } = useAuth();
@@ -10,7 +11,7 @@ const useLogout = () => {
         setAuth({});
 
         try {
-            await axios("/logout", {
+            await axios.post(routes.auth.logout, {
                 withCredentials: true,
             })
         } catch (err) {

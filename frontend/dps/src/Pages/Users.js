@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { routes } from '../http/routes';
 
 const Users = () => {
     const [users, setUsers] = useState();
@@ -10,7 +11,7 @@ const Users = () => {
 
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get("/users/all", 
+                const response = await axiosPrivate.get(routes.users.all, 
                     { 
                         ...axiosPrivate.defaults,
                         signal: controller.signal 
