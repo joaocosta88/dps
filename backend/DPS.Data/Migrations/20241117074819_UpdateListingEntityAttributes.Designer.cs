@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DPS.Data
+namespace DPS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241111211211_AddUniqueConstraintToRefreshToken")]
-    partial class AddUniqueConstraintToRefreshToken
+    [Migration("20241117074819_UpdateListingEntityAttributes")]
+    partial class UpdateListingEntityAttributes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,9 @@ namespace DPS.Data
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -118,19 +121,16 @@ namespace DPS.Data
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("text");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Listings");
                 });
@@ -151,7 +151,6 @@ namespace DPS.Data
                         .HasColumnType("boolean");
 
                     b.Property<string>("PreviousRefreshToken")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
@@ -305,11 +304,11 @@ namespace DPS.Data
 
             modelBuilder.Entity("DPS.Data.Entities.Listing", b =>
                 {
-                    b.HasOne("DPS.Data.Entities.ApplicationUser", "Owner")
+                    b.HasOne("DPS.Data.Entities.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("AuthorId");
 
-                    b.Navigation("Owner");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("DPS.Data.Entities.UserRefreshToken", b =>

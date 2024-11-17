@@ -1,47 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DPS.Data.Entities;
+using DPS.Service.Listings.Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace DPS.Service.Listings;
 
-public class SearchListingsResponse
+public class SearchListingsResponse(Listing listing) 
+    : ListingResponse(listing)
 {
-	public required Guid Id { get; set; }
-	public required string Name { get; set; }
-	public required string Description { get; set; }
-	public required string UserId { get; set; }
-	public required IList<string> ImageUrls { get; set; }
 }
 
-public partial class  ListingService {
+public partial class ListingService
+{
+    public async Task<AppResponse<IEnumerable<SearchListingsResponse>>> SearchListingsAsync(string? userId,
+        string? keyword, int pageNumber, int pageSize, bool includeDeleteds = false)
+    {
+        var query = _context.Listings.AsQueryable();
+        
+        if (userId != null)
+            query = query.Where(m => m.Author.Id == userId);
 
-	public async Task<AppResponse<List<SearchListingsResponse>>> SearchListingsAsync(string? userId, string? keyword, bool includeDeleteds = false)
-	{
-		var query = _context.Listings.AsQueryable();
-		if (userId != null)
-			query = query.Where(m => m.Owner.Id == userId);
-		
-		if (!string.IsNullOrWhiteSpace(keyword))
-			query = query.Where(m => m.Name.Contains(keyword) ||
-			m.Description.Contains(keyword));
+        if (!string.IsNullOrWhiteSpace(keyword))
+            query = query.Where(m => m.Title.Contains(keyword) ||
+                                     m.Description.Contains(keyword));
 
-		if (!includeDeleteds)
-			query = query.Where(m => !m.IsDeleted);
+        if (!includeDeleteds)
+            query = query.Where(m => !m.IsDeleted);
 
-		var queryResult = await query.Include(m =>m.Owner).ToListAsync();
+        query = query.Include(m => m.Author);
 
-		var res = queryResult.Select(m => new SearchListingsResponse
-		{
-			Id = m.Id,
-			Name = m.Name,
-			Description = m.Description,
-			UserId = m.Owner.Id,
-			ImageUrls = m.ImageUrls
-		}).ToList();
+        var queryCount = await query.CountAsync();
+        var queryResult = await query.ToListAsync();
 
-		return AppResponse<List<SearchListingsResponse>>.GetSuccessResponse(res);
-	}
+
+        var res = queryResult.Select(m => new SearchListingsResponse(m));
+
+        return AppResponse<IEnumerable<SearchListingsResponse>>.GetSuccessResponse(res);
+    }
 }

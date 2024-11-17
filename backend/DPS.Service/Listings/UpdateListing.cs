@@ -21,7 +21,7 @@ public partial class ListingService {
 	public AppResponse<UpdateListingResponse> UpdateListing(UpdateListingRequest request, string? currentUserId)
 	{
 		var listing = _context.Listings
-			.Include(listing => listing.Owner)
+			.Include(listing => listing.Author)
 			.FirstOrDefault(m => m.Id == request.Id);
 		
 		if (listing == null)
@@ -29,10 +29,10 @@ public partial class ListingService {
 		if (string.IsNullOrWhiteSpace(currentUserId))
 			throw new InvalidParameterException($"Empty current user Id");
 
-		if (listing.Owner.Id != currentUserId)
-			throw new ForbiddenOperationException($"Listing owner {listing.Owner.Id} does not match current user id {currentUserId}");
+		if (listing.Author.Id != currentUserId)
+			throw new ForbiddenOperationException($"Listing owner {listing.Author.Id} does not match current user id {currentUserId}");
 
-		listing.Name = request.Name;
+		listing.Title = request.Name;
 		listing.Description = request.Description;
 		listing.Price = request.Price;
 
@@ -41,7 +41,7 @@ public partial class ListingService {
 		var res = new UpdateListingResponse
 		{
 			Id = listing.Id,
-			Name = listing.Name,
+			Name = listing.Title,
 			Description = listing.Description,
 			Price = listing.Price,
 		};

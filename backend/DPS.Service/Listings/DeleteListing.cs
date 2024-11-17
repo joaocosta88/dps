@@ -16,8 +16,8 @@ public partial class ListingService {
 		if (listing == null)
 			throw new InvalidParameterException($"Could not find listing for listing id {listingId}");
 
-		if (listing.Owner.Id != userId) 
-			throw new ForbiddenOperationException($"UserId {userId} does not match listing owner id {listing.Owner.Id}");
+		if (listing.Author.Id != userId) 
+			throw new ForbiddenOperationException($"UserId {userId} does not match listing owner id {listing.Author.Id}");
 
 		listing.IsDeleted = true;
 		_context.Listings.Update(listing);

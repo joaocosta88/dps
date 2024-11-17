@@ -9,8 +9,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Missing from './pages/Missing';
 import Admin from './pages/Admin';
+import AddListing from './pages/AddListing';
 import Home from './pages/Home';
-import LinkPage from './pages/LinkPage';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
 
@@ -36,17 +36,18 @@ function App() {
           {/* Public routes  */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="linkpage" element={<LinkPage />} />
           <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="/" element={<Home />} />
 
           {/* Private routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth />}>
-              <Route path="/" element={<Home />} />
-            </Route>
-            <Route element={<RequireAuth />}>
               <Route path="admin" element={<Admin />} />
             </Route>
+            <Route element={<RequireAuth />}>
+              <Route path="addlisting" element={<AddListing />} />
+            </Route>
+            
           </Route>
           {/* Catch all */}
           <Route path="*" element={<Missing />} />

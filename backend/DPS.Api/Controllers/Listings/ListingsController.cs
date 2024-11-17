@@ -5,39 +5,22 @@ using System.Security.Claims;
 
 namespace DPS.Api.Controllers.Listings;
 
-[Route("api/[controller]")]
 [ApiController]
-public class ListingsController(ListingService listingService) : ControllerBase {
+[Route("[controller]/[action]")]
+public partial class ListingsController(ListingService listingService) : ControllerBase
+{
+    [HttpPut]
+    [Authorize]
+    public IActionResult UpdateListing(UpdateListingRequest request)
+    {
+        var res = listingService.UpdateListing(request, User.FindFirstValue("Id"));
+        return Ok(res);
+    }
 
-	[HttpPost]
-	[Authorize]
-	public async Task<IActionResult> CreateListing(AddListingRequest request) 
-	{
-		var res = await listingService.AddListingAsync(request, User.FindFirstValue("Id"));
-
-		return Ok(res);
-	}
-
-	[HttpPut]
-	[Authorize]
-	public IActionResult UpdateListing (UpdateListingRequest request)
-	{
-		var res = listingService.UpdateListing(request, User.FindFirstValue("Id"));
-		return Ok(res);
-	}
-
-	[HttpDelete]
-	public IActionResult DeleteListing (Guid listingId)
-	{
-		var res = listingService.DeleteListing(listingId, User.FindFirstValue("Id"));
-		return Ok(res);
-	}
-
-	[HttpGet]
-	public async Task<IActionResult> SearchListingsByUserId(string? userId = null, string? keyword = null)
-	{
-		var res = await listingService.SearchListingsAsync(userId, keyword);
-
-		return Ok(res);
-	}
+    [HttpDelete]
+    public IActionResult DeleteListing(Guid listingId)
+    {
+        var res = listingService.DeleteListing(listingId, User.FindFirstValue("Id"));
+        return Ok(res);
+    }
 }

@@ -9,8 +9,8 @@ export const routes = {
         me: "/users/profile",
         all: "/users/all"
     },
-    listing: {
-        add: "/api/listing",
-        search: "/api/listing",
+    listings: {
+        add: "/listings/createlisting",
+        get: "/listings/getlistings",
     },
 };

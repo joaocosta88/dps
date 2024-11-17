@@ -16,14 +16,12 @@ const Register = () => {
             confirmPassword: ''
         },
 
-        // functions will be used to validate values at corresponding key
         validate: {
             email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
             confirmPassword: (value, values) =>
                 value !== values.password ? 'Passwords did not match' : null,
         },
     });
-
 
     const handleSubmit = async (values) => {
         var response = await axios.post(routes.auth.register, {

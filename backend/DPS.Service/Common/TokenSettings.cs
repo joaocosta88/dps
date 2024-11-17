@@ -8,7 +8,6 @@
         public string SecretKey { get; init; }
         public int TokenExpireSeconds { get; init; }
         public int RefreshTokenExpireSeconds { get; init; }
-        
         public bool ValidateIssuer { get; init; } 
         public bool ValidateAudience { get; init; } 
         public bool ValidateLifetime { get; init; }

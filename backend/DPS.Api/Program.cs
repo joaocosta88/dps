@@ -17,11 +17,13 @@ using DPS.Service.Common;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
 {
-	options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-	options.UseNpgsql(connectionString);
+    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+    options.UseNpgsql(connectionString);
+   // options.UseSnakeCaseNamingConvention();
 });
 
 var tokenSettings = builder.Configuration.GetSection("TokenSettings").Get<TokenSettings>() ?? default!;
@@ -29,29 +31,29 @@ builder.Services.AddSingleton(tokenSettings);
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
-	options.TokenLifespan = TimeSpan.FromSeconds(tokenSettings.RefreshTokenExpireSeconds);
+    options.TokenLifespan = TimeSpan.FromSeconds(tokenSettings.RefreshTokenExpireSeconds);
 });
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
-	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-	options.RequireHttpsMetadata = false;
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = tokenSettings.ValidateIssuer,
-		ValidateAudience = tokenSettings.ValidateAudience,
-		ValidateLifetime = tokenSettings.ValidateLifetime,
-		ValidateIssuerSigningKey = tokenSettings.ValidateIssuerSigningKey,
-		RequireExpirationTime = tokenSettings.RequireExpirationTime,
-		ValidIssuer = tokenSettings.Issuer,
-		ValidAudience = tokenSettings.Audience,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.SecretKey)),
-		ClockSkew = TimeSpan.FromSeconds(0)
-	};
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = tokenSettings.ValidateIssuer,
+        ValidateAudience = tokenSettings.ValidateAudience,
+        ValidateLifetime = tokenSettings.ValidateLifetime,
+        ValidateIssuerSigningKey = tokenSettings.ValidateIssuerSigningKey,
+        RequireExpirationTime = tokenSettings.RequireExpirationTime,
+        ValidIssuer = tokenSettings.Issuer,
+        ValidAudience = tokenSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.SecretKey)),
+        ClockSkew = TimeSpan.FromSeconds(0)
+    };
 });
 
 var cookieSettings = builder.Configuration.GetSection("CookieSettings").Get<CookieSettings>() ?? default!;
@@ -59,9 +61,9 @@ builder.Services.AddSingleton(cookieSettings);
 
 
 builder.Services.AddIdentityCore<ApplicationUser>()
-			   .AddRoles<IdentityRole>()
-			   .AddSignInManager()
-			   .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddRoles<IdentityRole>()
+    .AddSignInManager()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 builder.Services.AddScoped<UserService>();
@@ -78,55 +80,57 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("webAppRequests", policyBuilder =>
-	{
-		var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
-		
-		policyBuilder.AllowAnyHeader()
-		.AllowAnyMethod()
-		.WithOrigins(allowedOrigins)
-		.AllowCredentials();
-	});
+    options.AddPolicy("webAppRequests", policyBuilder =>
+    {
+        var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
+        policyBuilder.AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins(allowedOrigins)
+            .AllowCredentials();
+    });
 });
 
 builder.Services.AddSwaggerGen(config =>
 {
-	config.SwaggerDoc("v1", new OpenApiInfo() { Title = "App Api", Version = "v1" });
-	config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-	{
-		In = ParameterLocation.Header,
-		Description = "Please enter token",
-		Name = "Authorization",
-		Type = SecuritySchemeType.Http,
-		BearerFormat = "JWT",
-		Scheme = "bearer"
-	});
-	config.AddSecurityRequirement(
-		new OpenApiSecurityRequirement{
-						{
-							new OpenApiSecurityScheme
-							{
-								Reference = new OpenApiReference
-								{
-									Type=ReferenceType.SecurityScheme,
-									Id="Bearer"
-								}
-							},
-							Array.Empty<string>()
-						}
-		});
+    config.SwaggerDoc("v1", new OpenApiInfo() { Title = "App Api", Version = "v1" });
+    config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+    config.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
 });
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
-	using var scope = app.Services.CreateScope();
-	var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
-	await initialiser.InitialiseAsync();
-	await initialiser.SeedAsync();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    using var scope = app.Services.CreateScope();
+    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+    await initialiser.InitialiseAsync();
+    await initialiser.SeedAsync();
 }
+
 app.UseHttpsRedirection();
 app.UseCors("webAppRequests");
 app.UseAuthentication();

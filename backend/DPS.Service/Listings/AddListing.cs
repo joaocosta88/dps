@@ -1,19 +1,18 @@
 ﻿using DPS.Common.Exceptions;
 using DPS.Data.Entities;
+using DPS.Service.Listings.Common;
 
 namespace DPS.Service.Listings;
 
 public class AddListingRequest {
-	public required string Name {  get; init; }
+	public required string Title {  get; init; }
 	public required string Description { get; init; }
 	public required decimal Price { get; init; }
 }
 
-public class AddListingResponse {
-	public Guid Id { get; init; }
-	public required string Name { get; init; }
-	public required string Description { get; init; }
-	public required decimal Price { get; init; }
+public class AddListingResponse(Listing listing) 
+	: ListingResponse(listing)
+{
 }
 
 public partial class ListingService {
@@ -28,22 +27,16 @@ public partial class ListingService {
 
 		var listing = new Listing
 		{
-			Name = request.Name,
+			Title = request.Title,
 			Description = request.Description,
 			Price = request.Price,
-			Owner = owner
+			Author = owner
 		};
 
 		await _context.Listings.AddAsync(listing);
 		await _context.SaveChangesAsync();
 
-		var res = new AddListingResponse
-		{
-			Id = listing.Id,
-			Name = listing.Name,
-			Description = listing.Description,
-			Price = listing.Price,
-		};
+		var res = new AddListingResponse(listing);
 
 		return AppResponse<AddListingResponse>.GetSuccessResponse(res);
 	}

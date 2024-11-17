@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DPS.Data
+namespace DPS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240810211325_InitialProductEntity")]
-    partial class InitialProductEntity
+    [Migration("20241117074711_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,7 +89,7 @@ namespace DPS.Data
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("DPS.Data.Entities.Product", b =>
+            modelBuilder.Entity("DPS.Data.Entities.Listing", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -105,9 +105,12 @@ namespace DPS.Data
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Images")
+                    b.Property<string[]>("ImageUrls")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text[]");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -119,9 +122,52 @@ namespace DPS.Data
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Listings");
+                });
+
+            modelBuilder.Entity("DPS.Data.Entities.UserRefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("ExpirationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsSessionToken")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PreviousRefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RefreshToken")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -254,6 +300,24 @@ namespace DPS.Data
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("DPS.Data.Entities.Listing", b =>
+                {
+                    b.HasOne("DPS.Data.Entities.ApplicationUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("DPS.Data.Entities.UserRefreshToken", b =>
+                {
+                    b.HasOne("DPS.Data.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
