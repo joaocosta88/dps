@@ -12,7 +12,7 @@ public class SearchListingsResponse(Listing listing)
 public partial class ListingService
 {
     public async Task<AppResponse<IEnumerable<SearchListingsResponse>>> SearchListingsAsync(string? userId,
-        string? keyword, int pageNumber, int pageSize, bool includeDeleteds = false)
+        string? keyword, int pageNumber, int pageSize, bool includeInactives = false)
     {
         var query = _context.Listings.AsQueryable();
         
@@ -23,15 +23,14 @@ public partial class ListingService
             query = query.Where(m => m.Title.Contains(keyword) ||
                                      m.Description.Contains(keyword));
 
-        if (!includeDeleteds)
-            query = query.Where(m => !m.IsDeleted);
+        if (!includeInactives)
+            query = query.Where(m => m.IsActive);
 
         query = query.Include(m => m.Author);
 
         var queryCount = await query.CountAsync();
         var queryResult = await query.ToListAsync();
-
-
+        
         var res = queryResult.Select(m => new SearchListingsResponse(m));
 
         return AppResponse<IEnumerable<SearchListingsResponse>>.GetSuccessResponse(res);

@@ -12,5 +12,6 @@ export const routes = {
     listings: {
         add: "/listings/createlisting",
         get: "/listings/getlistings",
+        delete: "/listings/deletelisting"
     },
 };

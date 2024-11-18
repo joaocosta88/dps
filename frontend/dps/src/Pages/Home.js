@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import ListingsPage from "./ListingsPage"
 import useAuth from "../hooks/useAuth";
-import AddListing from "./AddListing";
 
 const Home = () => {
     const { auth } = useAuth();

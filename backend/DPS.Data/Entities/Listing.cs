@@ -7,6 +7,6 @@ public class Listing : BaseAuditableEntity {
 	public required decimal Price { get; set; }
 
 	public IList<string> ImageUrls { get; set; } = [];
-	public bool IsDeleted { get; set; } = false;
+	public bool IsActive { get; set; } = false;
 	public required ApplicationUser Author { get; set; }
 }

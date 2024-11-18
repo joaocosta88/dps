@@ -9,28 +9,39 @@ const ListingsPage = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-
-        const fetchProducts = async () => {
-            try {
-                const response = await axiosPrivate.get(routes.listings.get,
-                    {
-                        signal: controller.signal
-                    });
-
-                setProducts(response.data.data);
-            } catch (error) {
-                console.error(error)
-            };
-        }
-
-        fetchProducts();
+        fetchProducts(controller);
     }, []);
+
+    const fetchProducts = async (controller) => {
+        try {
+            const response = await axiosPrivate.get(routes.listings.get,
+                {
+                    signal: controller.signal
+                });
+
+            setProducts(response.data.data);
+        } catch (error) {
+            console.error(error)
+        };
+    }
+
+    const handleDelete = async (productId) => {
+        try {
+            const response = await axiosPrivate.delete(routes.listings.delete+"/"+productId);
+
+            console.log("response after deleling "+JSON.stringify(response))
+            
+            setProducts(products.filter(product => product.id !== productId));
+        } catch (err) {
+            JSON.stringify("error deleting product "+JSON.stringify(err))
+        }
+    };
 
     return (
         <div class="product-list">
             {
                 products.map(product => (
-                    <ListingCard key={product.id} product={product} />
+                    <ListingCard key={product.id} product={product} onDelete={handleDelete}/>
                 ))}
         </div>
     )

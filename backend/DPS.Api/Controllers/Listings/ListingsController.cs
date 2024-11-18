@@ -16,11 +16,4 @@ public partial class ListingsController(ListingService listingService) : Control
         var res = listingService.UpdateListing(request, User.FindFirstValue("Id"));
         return Ok(res);
     }
-
-    [HttpDelete]
-    public IActionResult DeleteListing(Guid listingId)
-    {
-        var res = listingService.DeleteListing(listingId, User.FindFirstValue("Id"));
-        return Ok(res);
-    }
 }
