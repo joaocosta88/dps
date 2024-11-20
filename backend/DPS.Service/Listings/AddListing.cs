@@ -30,7 +30,8 @@ public partial class ListingService {
 			Title = request.Title,
 			Description = request.Description,
 			Price = request.Price,
-			Author = owner
+			Author = owner,
+			IsActive = true
 		};
 
 		await _context.Listings.AddAsync(listing);
