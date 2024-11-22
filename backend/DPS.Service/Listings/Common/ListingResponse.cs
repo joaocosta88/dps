@@ -2,7 +2,7 @@ using DPS.Data.Entities;
 
 namespace DPS.Service.Listings.Common;
 
-public class ListingResponse(Listing listing)
+public abstract class ListingResponse(Listing listing)
 {
     public Guid Id { get; init; } = listing.Id;
     public string Name { get; init; } = listing.Title;

@@ -7,7 +7,8 @@ export const routes = {
     },
     users: {
         me: "/users/profile",
-        all: "/users/all"
+        all: "/users/all",
+        byUsername: "/users/getbyusername/"
     },
     listings: {
         add: "/listings/createlisting",

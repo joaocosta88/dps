@@ -13,6 +13,7 @@ import AddListing from './pages/AddListing';
 import Home from './pages/Home';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
+import UsersListingPage from './pages/UsersListingPage';
 
 function App() {
   const [appIsLoading, setAppIsLoading] = useState(true);
@@ -38,7 +39,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="/" element={<Home />} />
-
+          <Route path="/shop/:userId" element={<UsersListingPage />} />
           {/* Private routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth />}>

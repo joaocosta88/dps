@@ -4,7 +4,8 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import useAuth from "../../hooks/useAuth";
 import useLogout from "../../hooks/useLogout";
- 
+import { Link } from "react-router-dom";
+
 function Header() {
   const { auth } = useAuth();
   const logout = useLogout();
@@ -16,7 +17,7 @@ function Header() {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="me-auto my-2 my-lg-0">
-            <Nav.Link href="#action1">Home</Nav.Link>
+            <Link to="/">Home</Link>
           </Nav>
 
           {/* Right side: Register/Login or Username with Dropdown */}
