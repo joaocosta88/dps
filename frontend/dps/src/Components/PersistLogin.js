@@ -1,49 +1,40 @@
 import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
+import useTokenRefresh from "../hooks/useTokenRefresh";
 
 const PersistLogin = () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const refresh = useRefreshToken();
-    const { auth, setAuth } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
+    const { auth } = useAuth();
+    const refreshTokenAndUserInfo = useTokenRefresh();
 
     useEffect(() => {
+
         const verifyRefreshToken = async () => {
             try {
-                var response = await refresh();
-
-                setAuth(prev => {
-                    return { ...prev, 
-                        roles: response.data.roles,
-                        accessToken: response.data.accessToken
-                    };
-                });
-                 
+                if (!auth?.accessToken) {
+                    await refreshTokenAndUserInfo();
+                }
             } catch (err) {
-                console.log(err);
+                console.error("Failed to refresh token:", err);
+            } finally {
+                setIsLoading(false);
             }
-            finally {
-                setIsLoading(false)
-            }
+        };
 
+        // Only try refreshing the token if we don't have an access token
+        if (!auth?.accessToken) {
+            verifyRefreshToken();
+        } else {
+            setIsLoading(false); // Already have the token, no need to refresh
         }
-
-        !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false)
-
-    }, [])
-
-    useEffect(() => {
-        console.log("is loading "+isLoading)
-        console.log("at "+JSON.stringify(auth?.accessToken))
-
-    }, [isLoading])
+    }, [auth, refreshTokenAndUserInfo]);
 
     return (
         <>
-        {isLoading ? <p>is loading...</p> : <Outlet />}
+            {isLoading ? <p>Loading...</p> : <Outlet />}
         </>
-    )
-}
+    );
+};
 
 export default PersistLogin;

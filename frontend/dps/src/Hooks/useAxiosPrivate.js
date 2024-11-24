@@ -1,66 +1,60 @@
 import { axiosPrivate } from "../http/axios";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
+import useTokenRefresh from "./useTokenRefresh";
 
 const useAxiosPrivate = () => {
-    const refreshAsync = useRefreshToken();
     const { auth, setAuth } = useAuth();
-
+    const refreshTokenAndUserInfo = useTokenRefresh();
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-        const requestInteceptor = axiosPrivate.interceptors.request.use(
-            config => {
-                if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.accessToken}`
+        const requestInterceptor = axiosPrivate.interceptors.request.use(
+            (config) => {
+                const token = auth?.accessToken;
+                if (token && !config.headers['Authorization']) {
+                    config.headers['Authorization'] = `Bearer ${token}`;
                 }
-
                 return config;
-            }, (error) => {
-                Promise.reject(error)
-            }
-        )
+            },
+            (error) => Promise.reject(error)
+        );
 
         const responseInterceptor = axiosPrivate.interceptors.response.use(
-            response => response,
+            (response) => response,
             async (error) => {
                 const prevRequest = error?.config;
+
                 if (error?.response?.status === 401 && !prevRequest?.sent) {
-                    prevRequest.sent = true //prevent endless loop of calling this multiple times 
+                    prevRequest.sent = true; // Prevent endless loop
 
                     try {
-                        const response = await refreshAsync();
+                        // Step 1: Refresh token and get user info
+                        const newAccessToken = await refreshTokenAndUserInfo();
 
-                        setAuth(prev => {
-                            return { ...prev, 
-                                accessToken: response.data.accessToken,
-                            };
-                        });
-
-                        prevRequest.headers['Authorization'] = `Bearer ${response.data.accessToken}`;
-                    }
-                    catch (err) {
-                        console.log(JSON.stringify(err))
-                        console.log("could not refresh refresh token")
+                        // Step 2: Update token for the retried request
+                        prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                        return axiosPrivate(prevRequest);
+                    } catch (err) {
+                        console.error("Could not refresh token or fetch user info", err);
                         navigate("/login", { state: { from: location }, replace: true });
-
+                        return Promise.reject(err);
                     }
-                    return axiosPrivate(prevRequest)
                 }
+
+                return Promise.reject(error);
             }
-        )
+        );
 
         return () => {
-            axiosPrivate.interceptors.request.eject(requestInteceptor)
-            axiosPrivate.interceptors.response.eject(responseInterceptor)
-        }
-    }, [auth, refreshAsync]);
+            axiosPrivate.interceptors.request.eject(requestInterceptor);
+            axiosPrivate.interceptors.response.eject(responseInterceptor);
+        };
+    }, [auth?.accessToken, setAuth, navigate, location, refreshTokenAndUserInfo]);
 
     return axiosPrivate;
-}
+};
 
 export default useAxiosPrivate;

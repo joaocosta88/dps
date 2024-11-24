@@ -14,7 +14,7 @@ public partial class UsersController
         return Ok(AppResponse<object>.GetSuccessResponse(
             new
             {
-                Email = User.FindFirstValue("UserName")
+                Email = User.FindFirstValue("Email")
             }
         ));
     }

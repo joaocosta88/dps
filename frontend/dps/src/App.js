@@ -13,7 +13,7 @@ import AddListing from './pages/AddListing';
 import Home from './pages/Home';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
-import UsersListingPage from './pages/UsersListingPage';
+import UserShop from './pages/UserShop';
 
 function App() {
   const [appIsLoading, setAppIsLoading] = useState(true);
@@ -32,26 +32,27 @@ function App() {
       <Header />
 
       <Routes>
-        <Route path="/" element={<Layout />} >
+        <Route element={<PersistLogin />}>
+          <Route path="/" element={<Layout />} >
 
-          {/* Public routes  */}
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/shop/:userId" element={<UsersListingPage />} />
-          {/* Private routes */}
-          <Route element={<PersistLogin />}>
+            {/* Public routes  */}
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="unauthorized" element={<Unauthorized />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/shop/:userId" element={<UserShop />} />
+            {/* Private routes */}
             <Route element={<RequireAuth />}>
               <Route path="admin" element={<Admin />} />
             </Route>
             <Route element={<RequireAuth />}>
               <Route path="addlisting" element={<AddListing />} />
             </Route>
-            
+
+            {/* Catch all */}
+            <Route path="*" element={<Missing />} />
           </Route>
-          {/* Catch all */}
-          <Route path="*" element={<Missing />} />
+
         </Route>
       </Routes>
     </main >

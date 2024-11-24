@@ -3,25 +3,24 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { routes } from '../http/routes';
 import ListingCard from './ListingCard';
 
-const ListingsPage = ({ userId }) => {
+const ListingsPage = () => {
     const [products, setProducts] = useState([]);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         const controller = new AbortController();
         fetchProducts(controller);
+
+        return () => controller.abort();
     }, []);
 
     const fetchProducts = async (controller) => {
         try {
-            const route = userId == null 
-            ? routes.listings.get 
-            : routes.listings.get + "?userId="+userId;
-
-            const response = await axiosPrivate.get(route,
+            const response = await axiosPrivate.get(routes.listings.get,
                 {
                     signal: controller.signal
                 });
+                console.log("Setting products:", response.data.data);
 
             setProducts(response.data.data);
         } catch (error) {
@@ -29,23 +28,11 @@ const ListingsPage = ({ userId }) => {
         };
     }
 
-    const handleDelete = async (productId) => {
-        try {
-            const response = await axiosPrivate.delete(routes.listings.delete + "/" + productId);
-
-            console.log("response after deleling " + JSON.stringify(response))
-
-            setProducts(products.filter(product => product.id !== productId));
-        } catch (err) {
-            JSON.stringify("error deleting product " + JSON.stringify(err))
-        }
-    };
-
     return (
-        <div class="product-list">
+        <div className="product-list">
             {
                 products.map(product => (
-                    <ListingCard key={product.id} product={product} onDelete={handleDelete} />
+                    <ListingCard key={product.id} product={product}/>
                 ))}
         </div>
     )

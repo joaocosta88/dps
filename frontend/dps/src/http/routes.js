@@ -6,7 +6,7 @@ export const routes = {
         logout: "/auth/logout",
     },
     users: {
-        me: "/users/profile",
+        me: "/users/getuserprofile",
         all: "/users/all",
         byUsername: "/users/getbyusername/"
     },
