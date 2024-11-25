@@ -21,9 +21,10 @@ public partial class AuthService {
 		{
 			UserName = request.Email,
 			Email = request.Email,
-
+			EmailConfirmed = false
 		};
-
+		
+		//userManager.GenerateEmailConfirmationTokenAsync()
 		var result = await userManager.CreateAsync(user, request.Password);
 		if (!result.Succeeded)
 			return AppResponse<bool>.GetErrorResponse("general_register_error", errorDetails: GetRegisterErrors(result));
