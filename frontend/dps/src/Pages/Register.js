@@ -1,11 +1,13 @@
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 import axios from "../http/axios";
 import { routes } from "../http/routes"
 
 const Register = () => {
+    const navigate = useNavigate();
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -46,6 +48,8 @@ const Register = () => {
                 })
             }
         }
+
+        navigate("/", { replace: true })
     };
 
     return (
