@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using DPS.Service.Auth;
 using DPS.Service.Common;
+using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,7 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<IUser, CurrentUser>();
+builder.Services.AddScoped<HtmlRenderer>();
 
 builder.Services.AddHttpContextAccessor();
 

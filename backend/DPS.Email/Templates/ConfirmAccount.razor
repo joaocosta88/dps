@@ -1,0 +1,11 @@
+<BaseTemplate>
+    <Body>
+    <h1>Confirm account</h1>
+    <p>Follow the following link to confirm your account:</p>
+    <a href="@AccountConfirmUrl">Confirm account</a>
+    </Body>
+</BaseTemplate>
+
+@code {
+    [Parameter] public string AccountConfirmUrl { get; set; }
+}

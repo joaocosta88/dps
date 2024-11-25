@@ -5,6 +5,8 @@ using DPS.Aws.S3;
 using Microsoft.Extensions.Configuration;
 
 namespace DPS.Aws.Tests;
+
+[TestClass]
 public partial class S3ServiceTest {
 	
 	private const string BucketName = "dps--test--bucket";

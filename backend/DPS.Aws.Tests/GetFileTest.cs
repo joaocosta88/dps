@@ -3,8 +3,8 @@ using DPS.Common;
 
 namespace DPS.Aws.Tests;
 
-[TestClass]
 public partial class S3ServiceTest{
+	
 	[TestMethod]
 	public async Task TestGetFile()
 	{
