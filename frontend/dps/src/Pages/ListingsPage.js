@@ -20,7 +20,6 @@ const ListingsPage = () => {
                 {
                     signal: controller.signal
                 });
-                console.log("Setting products:", response.data.data);
 
             setProducts(response.data.data);
         } catch (error) {

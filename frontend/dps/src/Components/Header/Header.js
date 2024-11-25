@@ -13,11 +13,10 @@ function Header() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
-        <Navbar.Brand href="/">DPS</Navbar.Brand>
+        <Navbar.Brand><Link to="/">DPS</Link></Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="me-auto my-2 my-lg-0">
-            <Link to="/">Home</Link>
           </Nav>
 
           {/* Right side: Register/Login or Username with Dropdown */}
