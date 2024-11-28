@@ -10,6 +10,8 @@ nupkg/
 # Visual Studio Code
 .vscode/
 
+**/appsettings.Development.json
+
 # Rider
 .idea/
 
