@@ -11,10 +11,4 @@ public partial class AuthController
     {
         return await authService.UserRegisterAsync(req);
     }
-
-    [HttpPost]
-    public IActionResult ConfirmAccountRegistration(UserRegisterRequest req)
-    {
-        return Ok();
-    }
 }

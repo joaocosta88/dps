@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using DPS.Email;
+using DPS.Email.Helpers;
 using DPS.Service.Auth;
 using DPS.Service.Common;
 using Microsoft.AspNetCore.Components.Web;
@@ -60,6 +62,8 @@ builder.Services.AddAuthentication(options =>
 var cookieSettings = builder.Configuration.GetSection("CookieSettings").Get<CookieSettings>() ?? default!;
 builder.Services.AddSingleton(cookieSettings);
 
+var emailConfig = builder.Configuration.GetSection("EmailConfig").Get<EmailConfig>() ?? default!;
+builder.Services.AddSingleton(emailConfig);
 
 builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()
@@ -72,7 +76,11 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<IUser, CurrentUser>();
 builder.Services.AddScoped<HtmlRenderer>();
-
+builder.Services.AddSingleton<EmailSender>();
+builder.Services.AddSingleton<EmailBodyFactory>(m
+    => new EmailBodyFactory(m.GetService<HtmlRenderer>() ?? throw new InvalidOperationException()));
+builder.Services.AddSingleton(m =>
+    new UrlFactory(builder.Configuration.GetValue<string>("BaseUrl")!));
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ISaveChangesInterceptor, BaseEntityInterceptor>();

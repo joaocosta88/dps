@@ -6,7 +6,7 @@ namespace DPS.Email;
 
 public class EmailSender(EmailConfig config, EmailBodyFactory emailBodyFactory)
 {
-    public async Task SendResetPasswordEmail(string to, string resetPasswordUrl)
+    public async Task SendResetPasswordEmailAsync(string to, string resetPasswordUrl)
     {
         string subject = SubjectFactory.GetResetPasswordSubject();
         string body = await emailBodyFactory.RenderConfirmAccountEmailAsync(resetPasswordUrl);
@@ -14,7 +14,7 @@ public class EmailSender(EmailConfig config, EmailBodyFactory emailBodyFactory)
          SendEmail(to, subject, body);
     }
 
-    public async Task SendConfirmAccountEmail(string to, string confirmAccountUrl)
+    public async Task SendConfirmAccountEmailAsync(string to, string confirmAccountUrl)
     {
         string subject = SubjectFactory.GetConfirmAccountSubject();
         string body = await emailBodyFactory.RenderConfirmAccountEmailAsync(confirmAccountUrl);

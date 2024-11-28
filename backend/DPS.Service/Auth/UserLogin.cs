@@ -25,6 +25,9 @@ public partial class AuthService
         if (user == null)
             return AppResponse<UserLoginResponse>.GetErrorResponse("email_not_found", "Email not found");
 
+        if (!user.EmailConfirmed)
+            return AppResponse<UserLoginResponse>.GetErrorResponse("email_not_confirmed", "Email not confirmed");
+        
         var isValidPassword = await signInManager.CheckPasswordSignInAsync(user, request.Password, true);
         if (!isValidPassword.Succeeded)
             return AppResponse<UserLoginResponse>.GetErrorResponse("invalid_password", isValidPassword.ToString());

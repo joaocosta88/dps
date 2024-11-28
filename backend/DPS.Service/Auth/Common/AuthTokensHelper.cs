@@ -1,13 +1,19 @@
 namespace DPS.Service.Auth.Common;
 
-public static class AuthUrlHelper
+public static class AuthTokensHelper
 {
     public static string CreateConfirmAccountUrl(string email, string token)
-        => Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{email}:{token}"));
+        => EncodeAuthOperationToken(email, token);
 
-    public static (string email, string confirmationToken) DecodeConfirmAccountToken(string token)
+    public static string CreateResetPasswordUrl(string email, string token)
+        => EncodeAuthOperationToken(email, token);
+  
+    public static string EncodeAuthOperationToken(string email, string token) 
+        => Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{email}:{token}"));
+    
+    public static (string email, string token) DecodeAuthOperationToken(string encodedToken)
     {
-       var str = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(token));
+       var str = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedToken));
        var tokens = str.Split(":");
        return (tokens[0], tokens[1]);
     }
