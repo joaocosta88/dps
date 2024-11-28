@@ -22,6 +22,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddHealthChecks();
+
 builder.Services.AddDbContext<ApplicationDbContext>((sp, options) =>
 {
     options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
@@ -140,6 +143,8 @@ if (app.Environment.IsDevelopment())
     await initialiser.InitialiseAsync();
     await initialiser.SeedAsync();
 }
+
+app.MapHealthChecks("/health");
 
 app.UseHttpsRedirection();
 app.UseCors("webAppRequests");
