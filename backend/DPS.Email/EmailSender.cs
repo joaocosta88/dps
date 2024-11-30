@@ -21,6 +21,7 @@ public class EmailSender(EmailConfig config, EmailBodyFactory emailBodyFactory)
         
         SendEmail(to, subject, body);
     }
+    
     private void SendEmail(string toAddress, string subject, string body)
     {
         using var client = GetSmtpClient();
@@ -30,7 +31,7 @@ public class EmailSender(EmailConfig config, EmailBodyFactory emailBodyFactory)
         );
         message.Subject = subject;
         message.Body = body;
-
+        message.IsBodyHtml = true;
         client.Send(message);
     }
 

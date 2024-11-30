@@ -1,4 +1,5 @@
 ﻿using DPS.Data.Entities;
+using DPS.Service.Auth.Common;
 
 namespace DPS.Service.Auth;
 
@@ -27,6 +28,7 @@ public partial class AuthService {
 			return AppResponse<bool>.GetErrorResponse("general_register_error", errorDetails: GetIdentityErrors(result));
 		
 		var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+		token = AuthTokensHelper.EncodeAuthOperationToken(user.Email, token);
 		var accountConfirmationUrl = urlFactory.GetAccountConfirmationUrl(token);
 		await emailSender.SendConfirmAccountEmailAsync(user.Email, accountConfirmationUrl);
 		

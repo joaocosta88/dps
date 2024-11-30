@@ -71,6 +71,7 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddSignInManager()
+    .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
@@ -79,11 +80,10 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ListingService>();
 builder.Services.AddScoped<IUser, CurrentUser>();
 builder.Services.AddScoped<HtmlRenderer>();
-builder.Services.AddSingleton<EmailSender>();
-builder.Services.AddSingleton<EmailBodyFactory>(m
-    => new EmailBodyFactory(m.GetService<HtmlRenderer>() ?? throw new InvalidOperationException()));
+builder.Services.AddScoped<EmailSender>();
+builder.Services.AddScoped<EmailBodyFactory>();
 builder.Services.AddSingleton(m =>
-    new UrlFactory(builder.Configuration.GetValue<string>("BaseUrl")!));
+    new UrlFactory(builder.Configuration.GetValue<string>("FrontendUrl")!));
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ISaveChangesInterceptor, BaseEntityInterceptor>();
@@ -139,9 +139,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     using var scope = app.Services.CreateScope();
-    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
-    await initialiser.InitialiseAsync();
-    await initialiser.SeedAsync();
+    var initializer = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+    await initializer.InitialiseAsync();
+    await initializer.SeedAsync();
 }
 
 app.MapHealthChecks("/health");

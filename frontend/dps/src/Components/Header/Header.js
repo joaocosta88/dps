@@ -34,10 +34,14 @@ function Header() {
             ) : (
               <>
                 <Nav.Item>
-                  <Nav.Link href="/register" variant="outline-primary" className="me-2">Register</Nav.Link>
+                  <Nav.Link variant="outline-primary" className="me-2"><Link to="/register">Register</Link></Nav.Link>
+                  {/* <Nav.Link href="/register" variant="outline-primary" className="me-2">Register</Nav.Link> */}
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link href="/login" variant="primary">Login</Nav.Link>
+
+                  <Nav.Link variant="primary" className="me-2">
+                    <Link to="/login">Login</Link>
+                  </Nav.Link>
                 </Nav.Item>
               </>
             )}

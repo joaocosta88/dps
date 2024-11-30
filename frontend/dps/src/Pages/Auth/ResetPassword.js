@@ -1,13 +1,15 @@
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { Group, Box, PasswordInput, TextInput, Button } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import axios from "../http/axios";
-import { routes } from "../http/routes"
+import axios from "../../http/axios";
+import { routes } from "../../http/routes"
 
-const Register = () => {
+const ResetPassword = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token");
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -19,37 +21,27 @@ const Register = () => {
         },
 
         validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
             confirmPassword: (value, values) =>
                 value !== values.password ? 'Passwords did not match' : null,
         },
     });
 
     const handleSubmit = async (values) => {
-        var response = await axios.post(routes.auth.register, {
-            "email":values.email,
-            "password":values.password
+        var response = await axios.post(routes.auth.resetPassword, {
+            "email": values.email,
+            "password": values.password,
+            token
         }, {})
 
-        if (!response.data.success)
-        {
-            if (response.data.error.errorCode === "duplicate_email") {
-                notifications.show({
-                    color: "red",
-                    title: 'Error while registering user',
-                    message: 'This email is already registered',
-                })
-            }
-            else {
-                notifications.show({
-                    color: "red",
-                    title: 'Error while registering user',
-                    message: 'Registration failed' ,
-                })
-            }
+        if (!response.data.success) {
+            notifications.show({
+                color: "red",
+                title: 'Error while reseting the password',
+                message: 'Reset password failed',
+            })
         }
-
-        navigate("/", { replace: true })
+        else
+            navigate("/", { replace: true })
     };
 
     return (
@@ -86,4 +78,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default ResetPassword;

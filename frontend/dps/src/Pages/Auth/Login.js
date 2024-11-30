@@ -2,9 +2,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Group, Box, PasswordInput, TextInput, Button, Checkbox } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import axios from "../http/axios";
-import useAuth from '../hooks/useAuth';
-import { routes } from "../http/routes"
+import axios from "../../http/axios";
+import useAuth from '../../hooks/useAuth';
+import { routes } from "../../http/routes"
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const { setAuth } = useAuth();
@@ -77,6 +78,9 @@ const Login = () => {
                     label="Keep logged in?"
                     {...form.getInputProps("keepLoggedIn", { type: "checkbox" })}
                 />
+
+                <Link to="/forgotPassword">Forgot password</Link>
+                
                 <Group justify="flex-end" mt="md">
                     <Button type="submit">Submit</Button>
                 </Group>
