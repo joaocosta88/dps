@@ -28,11 +28,14 @@ const ListingsPage = () => {
     }
 
     return (
-        <div className="product-list">
+        <div className="product-list" style={{ display: 'flex', flexWrap: 'wrap' }}>
             {
                 products.map(product => (
-                    <ListingCard key={product.id} product={product}/>
-                ))}
+                    <>
+                        <ListingCard key={product.id} product={product} />
+                    </>
+                ))
+            }
         </div>
     )
 }

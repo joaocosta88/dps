@@ -33,15 +33,12 @@ function Header() {
               </NavDropdown>
             ) : (
               <>
-                <Nav.Item>
-                  <Nav.Link variant="outline-primary" className="me-2"><Link to="/register">Register</Link></Nav.Link>
+                <Nav.Item variant="outline-primary" className="me-2">
+                    <Link to="/register">Register</Link>
                   {/* <Nav.Link href="/register" variant="outline-primary" className="me-2">Register</Nav.Link> */}
                 </Nav.Item>
-                <Nav.Item>
-
-                  <Nav.Link variant="primary" className="me-2">
+                <Nav.Item  variant="primary" className="me-2">
                     <Link to="/login">Login</Link>
-                  </Nav.Link>
                 </Nav.Item>
               </>
             )}

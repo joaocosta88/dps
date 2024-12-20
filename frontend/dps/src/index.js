@@ -8,11 +8,14 @@ import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './providers/AuthProvider';
 import { MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 
 import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '@mantine/carousel/styles.css';
+
 
 if (process.env.NODE_ENV === 'production') {
   disableReactDevTools();
@@ -21,14 +24,16 @@ if (process.env.NODE_ENV === 'production') {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+  <MantineProvider withGlobalStyles withNormalizeCSS>
+    <ModalsProvider>
       <Notifications autoClose={5000} />
       <AuthProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
       </AuthProvider>
-    </MantineProvider>
+    </ModalsProvider>
+  </MantineProvider>
   // </React.StrictMode>
 );
 

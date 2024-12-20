@@ -14,7 +14,7 @@ import Home from './pages/Home';
 import Unauthorized from './pages/Unauthorized';
 import Layout from './components/Layout';
 import UserShop from './pages/UserShop';
-import PasswordReset from './pages/Auth/ForgotPassword';
+import ForgotPassword from './pages/Auth/ForgotPassword';
 import ResetPassword from './pages/Auth/ResetPassword';
 import ConfirmAccount from './pages/Auth/ConfirmAccount';
 
@@ -42,7 +42,7 @@ function App() {
             {/*  Auth  */}
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="forgotpassword" element={<PasswordReset /> } />
+            <Route path="forgotpassword" element={<ForgotPassword /> } />
             <Route path="resetpassword" element={<ResetPassword /> } />
             <Route path="confirmaccount" element={<ConfirmAccount />} />
             <Route path="unauthorized" element={<Unauthorized />} />

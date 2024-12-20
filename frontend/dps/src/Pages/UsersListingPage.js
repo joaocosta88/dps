@@ -42,7 +42,7 @@ const UsersListingPage = ({ user }) => {
     };
 
     return (
-        <div className="product-list">
+        <div className="product-list" style={{display: 'flex'}}>
             {
                 products.map(product => (
                     <div key={product.id}>
