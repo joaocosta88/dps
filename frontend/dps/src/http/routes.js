@@ -1,5 +1,3 @@
-import ConfirmAccount from "../pages/Auth/ConfirmAccount";
-
 export const routes = {
     auth: {
         register: "/auth/register",
